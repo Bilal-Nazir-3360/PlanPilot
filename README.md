@@ -13,6 +13,8 @@ PlanPilot has two experiences:
 
 The app seeds an Acme workspace with tasks, projects, calendar items, team members, and analytics data. A user can sign in locally, manage tasks, switch themes, open the workspace help widget, and clear locally stored workspace data.
 
+The visual system includes a compact animated network illustration inspired by connected workspaces. It is intentionally positioned behind the interface with low-contrast lines, softly pulsing nodes, and reduced-motion support so it adds atmosphere without making the content difficult to read.
+
 ## Features
 
 ### Public experience
@@ -39,6 +41,9 @@ The app seeds an Acme workspace with tasks, projects, calendar items, team membe
 - Team directory with member roles and invite action.
 - Analytics view with velocity, on-time rate, cycle time, and Recharts visualization.
 - Settings page with dark/light mode toggle and clear-local-data action.
+- Persistent dark/light mode controls in the public navigation, authentication pages, and dashboard.
+- Subtle animated network background with separate dark- and light-mode contrast tuning.
+- Responsive navigation controls and background scaling for mobile screens.
 - Sidebar navigation with active route state.
 - Floating workspace help widget.
 - Toast notifications for key local actions.
@@ -66,6 +71,12 @@ The app seeds an Acme workspace with tasks, projects, calendar items, team membe
 - Context API
 - Browser localStorage
 - Vercel SPA rewrite configuration
+
+## Theme and motion behavior
+
+Dark mode is the default and uses deep navy surfaces, gold actions, and cyan/teal ambient accents. Light mode uses warm off-white surfaces, readable slate text, teal active states, and softer network artwork. The selected mode is stored in `pp_theme` and is restored on the next visit.
+
+The ambient network is decorative only, uses `aria-hidden="true"`, and never captures pointer input. Users who enable reduced motion in their operating system see the same illustration without animated movement.
 
 ## Folder structure
 
@@ -158,6 +169,24 @@ vercel --prod
 ```
 
 If environment-backed integrations are added later, copy `.env.example` into Vercel Project Settings and configure the corresponding variables. Do not commit `.env` files or secrets.
+
+## GitHub publishing workflow
+
+The source repository is:
+
+`https://github.com/Bilal-Nazir-3360/PlanPilot`
+
+After making changes, run the production build, review the working tree, and push the `master` branch:
+
+```bash
+npm run build
+git status
+git add -A
+git commit -m "Describe the change"
+git push origin master
+```
+
+Keep generated dependencies, build output, local environment files, and editor files excluded through `.gitignore`. Never commit passwords, API keys, or `.env` files.
 
 ## Route map
 
