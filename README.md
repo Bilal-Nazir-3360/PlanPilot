@@ -76,7 +76,7 @@ The visual system includes a compact animated network illustration inspired by c
 
 Dark mode is the default and uses deep navy surfaces, gold actions, and cyan/teal ambient accents. Light mode uses warm off-white surfaces, readable slate text, teal active states, and softer network artwork. The selected mode is stored in `pp_theme` and is restored on the next visit.
 
-The ambient network is decorative only, uses `aria-hidden="true"`, and never captures pointer input. Users who enable reduced motion in their operating system see the same illustration without animated movement.
+The canvas aurora mesh is decorative only, uses `aria-hidden="true"`, and never captures pointer input. It adapts to the active PlanPilot theme, responds gently to pointer movement, caps device-pixel-ratio work for high-density screens, and respects `prefers-reduced-motion`.
 
 ## Folder structure
 
@@ -93,7 +93,9 @@ PlanPilot/
 ├── .gitignore
 ├── README.md
 └── src/
-    ├── main.jsx               # Routes, providers, pages, components, demo data
+    ├── main.jsx               # Routes, providers, pages, and demo data
+    ├── components/
+    │   └── AmbientBackground.jsx # Canvas aurora mesh background
     └── styles.css             # Global theme, responsive layout, and component CSS
 ```
 
