@@ -30,6 +30,7 @@ A calm, focused task-management workspace for teams that want less noise and mor
 - Reusable contexts, services, UI components, and page modules ready for a future API.
 - Animated ambient background that adapts to the active theme without blocking interaction.
 - Visual animations respect reduced-motion preferences and keep draggable task cards sensor-safe.
+- Route pages are lazy-loaded and production dependencies are split into React, motion, charts, and dnd vendor chunks to reduce the initial bundle.
 
 ## Tech stack
 
