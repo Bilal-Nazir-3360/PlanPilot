@@ -102,7 +102,7 @@ Drag-and-drop reordering is intentionally disabled while search or filters are a
 
 `/dashboard` · `/dashboard/tasks` · `/dashboard/projects` · `/dashboard/calendar` · `/dashboard/team` · `/dashboard/analytics` · `/dashboard/settings`
 
-The `/features` page is a product tour: live task and theme capabilities are marked separately from sample-data previews and future roadmap items.
+The `/features` page is a product tour: live task and theme capabilities are marked separately from sample-data previews and future roadmap items. Live feature details link directly into the demo login flow.
 
 ## Project structure
 

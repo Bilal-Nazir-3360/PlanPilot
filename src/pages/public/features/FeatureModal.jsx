@@ -1,5 +1,6 @@
 import { Check, X } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import Button from '../../../components/ui/Button'
 import Modal from '../../../components/ui/Modal'
 import StatusBadge from './StatusBadge'
@@ -14,6 +15,6 @@ export default function FeatureModal({ feature, close }) {
   if (!feature) return null
   return <Modal onClose={close} layoutId={`feature-${feature.id}`} labelledBy={`feature-modal-${feature.id}`} className="feature-modal">
     <div className="card-head"><div><StatusBadge status={feature.status}/><h2 id={`feature-modal-${feature.id}`}>{feature.title}</h2></div><button type="button" className="icon-btn" onClick={close} aria-label="Close feature details"><X size={18}/></button></div>
-    <div className="feature-modal-content"><p>{feature.description}</p><ModalVisual feature={feature}/><ul className="feature-capabilities">{feature.capabilities.map((capability) => <li key={capability}><Check size={15}/>{capability}</li>)}</ul>{feature.status === 'Live' && <Button onClick={close}>Try it in the demo</Button>}</div>
+    <div className="feature-modal-content"><p>{feature.description}</p><ModalVisual feature={feature}/><ul className="feature-capabilities">{feature.capabilities.map((capability) => <li key={capability}><Check size={15}/>{capability}</li>)}</ul>{feature.status === 'Live' && <Link to="/login" onClick={close}><Button>Try it in the demo</Button></Link>}</div>
   </Modal>
 }
