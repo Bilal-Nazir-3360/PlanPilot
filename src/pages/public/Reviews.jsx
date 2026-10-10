@@ -1,0 +1,10 @@
+import { useState } from 'react'
+import { Star } from 'lucide-react'
+import Button from '../../components/ui/Button'
+import Navbar from '../../components/layout/Navbar'
+import Footer from '../../components/layout/Footer'
+import { useApp } from '../../context/AppContext'
+
+function Reviews(){const {reviews,addReview}=useApp();const [showAll,setShowAll]=useState(false);const [form,setForm]=useState({name:'',text:'',rating:5});const submit=e=>{e.preventDefault();if(!form.name.trim()||!form.text.trim())return;addReview(form);setForm({name:'',text:'',rating:5})};return <><Navbar/><main className="simple-page reviews-page"><div className="eyebrow">FROM THE COMMUNITY</div><h1>Loved by teams who care</h1><p className="simple-content">Real feedback from people turning plans into meaningful progress.</p><div className="review-grid">{reviews.slice(0,showAll?reviews.length:4).map(r=><article className="review-card" key={r.id}><div className="stars">{Array.from({length:5},(_,i)=><Star key={i} size={15} fill={i<r.rating?'currentColor':'none'}/>)}</div><p>“{r.text}”</p><b>{r.name}</b><small>{r.date}</small></article>)}</div><button className="btn ghost review-toggle" onClick={()=>setShowAll(!showAll)}>{showAll?'Show fewer':'Show all reviews'}</button><form className="review-form card" onSubmit={submit}><h2>Share your experience</h2><div className="form-row"><label>Name<input required value={form.name} onChange={e=>setForm({...form,name:e.target.value})}/></label><label>Rating<select value={form.rating} onChange={e=>setForm({...form,rating:Number(e.target.value)})}><option value="5">5 stars</option><option value="4">4 stars</option><option value="3">3 stars</option><option value="2">2 stars</option><option value="1">1 star</option></select></label></div><label>Your review<textarea required rows="4" value={form.text} onChange={e=>setForm({...form,text:e.target.value})}/></label><Button type="submit">Submit review <Star size={15}/></Button></form></main><Footer/></>}
+
+export default Reviews

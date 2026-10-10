@@ -1,0 +1,9 @@
+import { ArrowRight, Clock3, ShieldCheck, Target, TrendingUp } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import Button from '../../components/ui/Button'
+import Navbar from '../../components/layout/Navbar'
+import Footer from '../../components/layout/Footer'
+
+function Landing(){return <><Navbar/><main><section className="hero"><div className="eyebrow">THE CLEARER WAY TO WORK</div><h1>Plan boldly.<br/><em>Ship clearly.</em></h1><p className="hero-copy">PlanPilot brings your tasks, projects, and people into one calm, focused workspace. Less noise. More momentum.</p><div className="hero-actions"><Link to="/signup"><Button>Start planning free <ArrowRight size={16}/></Button></Link><Link to="/features" className="text-link">See how it works <ArrowRight size={15}/></Link></div><div className="hero-note"><ShieldCheck size={16}/> No credit card required · Set up in 2 minutes</div></section><section className="feature-strip"><div><Target/><b>One clear view</b><p>Everything your team needs, in context.</p></div><div><TrendingUp/><b>Built for momentum</b><p>Turn plans into meaningful progress.</p></div><div><Clock3/><b>More time to think</b><p>Automate the busywork, keep the craft.</p></div></section><section className="public-stats"><div><strong>12,500+</strong><span>active users</span></div><div><strong>850k</strong><span>tasks completed</span></div><div><strong>3,200</strong><span>teams using PlanPilot</span></div><div><strong>4,700</strong><span>five-star reviews</span></div></section></main><Footer/></>}
+
+export default Landing
