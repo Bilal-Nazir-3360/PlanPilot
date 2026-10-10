@@ -4,7 +4,7 @@
 
 ### Plan boldly. Ship clearly.
 
-A calm, focused task-management workspace for teams that want less noise and more momentum.
+PlanPilot is a focused task-management workspace for teams that want a clearer view of their work and less operational noise. It brings tasks, projects, planning, team activity, analytics, and product guidance into one calm, responsive interface.
 
 <p>
   <img src="https://img.shields.io/badge/status-prototype-e2b659?style=for-the-badge" alt="Prototype status" />
