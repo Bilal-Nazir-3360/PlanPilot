@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import { X } from 'lucide-react'
 import Button from './Button'
+import Modal from './Modal'
 import { TASK_STATUSES } from '../../utils/taskOrder'
 
 const projects = ['Website refresh', 'Q4 Launch', 'Internal']
@@ -24,38 +25,9 @@ function isValidDate(value) {
   return !Number.isNaN(date.getTime()) && `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}` === value
 }
 
-function useModalFocus(close) {
-  const modalRef = useRef(null)
-  useEffect(() => {
-    const previous = document.activeElement
-    const focusable = modalRef.current?.querySelectorAll('button, input, select, textarea')
-    focusable?.[0]?.focus()
-    const onKeyDown = (event) => {
-      if (event.key === 'Escape') close()
-      if (event.key !== 'Tab' || !focusable?.length) return
-      const first = focusable[0]
-      const last = focusable[focusable.length - 1]
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault()
-        last.focus()
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault()
-        first.focus()
-      }
-    }
-    document.addEventListener('keydown', onKeyDown)
-    return () => {
-      document.removeEventListener('keydown', onKeyDown)
-      previous?.focus?.()
-    }
-  }, [close])
-  return modalRef
-}
-
 export default function TaskModal({ close, save, task }) {
   const [form, setForm] = useState(() => getInitialForm(task))
   const [errors, setErrors] = useState({})
-  const modalRef = useModalFocus(close)
   const editing = Boolean(task)
   const update = (field, value) => {
     setForm((current) => ({ ...current, [field]: value }))
@@ -76,8 +48,8 @@ export default function TaskModal({ close, save, task }) {
     save({ ...form, title, description: form.description.trim(), tag: form.tag.trim() || 'General' })
   }
 
-  return <div className="modal-back" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && close()}>
-    <form className="modal task-form" ref={modalRef} onSubmit={submit} role="dialog" aria-modal="true" aria-labelledby="task-modal-title">
+  return <Modal onClose={close} labelledBy="task-modal-title">
+    <form className="task-form" onSubmit={submit}>
       <div className="card-head"><h3 id="task-modal-title">{editing ? 'Edit task' : 'New task'}</h3><button type="button" className="icon-btn" onClick={close} aria-label="Close task form"><X size={18}/></button></div>
       <label>Task name<input autoFocus value={form.title} onChange={(event) => update('title', event.target.value)} placeholder="What needs doing?" aria-invalid={Boolean(errors.title)} aria-describedby={errors.title ? 'task-title-error' : undefined}/>{errors.title && <small className="form-error" id="task-title-error">{errors.title}</small>}</label>
       <label>Description<textarea rows="3" value={form.description} onChange={(event) => update('description', event.target.value)} placeholder="Add useful context..." aria-invalid={Boolean(errors.description)} aria-describedby={errors.description ? 'task-description-error' : undefined}/>{errors.description && <small className="form-error" id="task-description-error">{errors.description}</small>}</label>
@@ -86,5 +58,5 @@ export default function TaskModal({ close, save, task }) {
       <label>Tag<input value={form.tag} onChange={(event) => update('tag', event.target.value)} placeholder="General"/></label>
       <div className="modal-actions"><Button type="button" variant="ghost" onClick={close}>Cancel</Button><Button type="submit">{editing ? 'Save changes' : 'Create task'}</Button></div>
     </form>
-  </div>
+  </Modal>
 }

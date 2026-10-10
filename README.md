@@ -24,9 +24,11 @@ A calm, focused task-management workspace for teams that want less noise and mor
 - Local demo authentication with protected dashboard routes.
 - Community reviews with star ratings and persistent submissions.
 - Dark/light theme with persistence and reduced-motion support.
+- Reusable SpotlightCard, tilt, reveal, animated Modal, and ConfirmDialog primitives with touch and accessibility support.
 - Responsive public marketing pages, authentication screens, and workspace layouts.
 - Reusable contexts, services, UI components, and page modules ready for a future API.
 - Animated ambient background that adapts to the active theme without blocking interaction.
+- Visual animations respect reduced-motion preferences and keep draggable task cards sensor-safe.
 
 ## Tech stack
 
@@ -105,7 +107,7 @@ Drag-and-drop reordering is intentionally disabled while search or filters are a
 src/
 ├── App.jsx                 # Route definitions
 ├── main.jsx                # React bootstrap, router, providers, styles
-├── components/             # Layouts, reusable UI, ambient background
+├── components/             # Layouts, animated UI primitives, ambient background
 ├── context/                # Auth, task, theme, and toast state
 ├── data/                   # Seed tasks, projects, reviews, and workspace data
 ├── pages/                  # Public and dashboard pages
