@@ -11,9 +11,11 @@ export function TaskProvider({ children }) {
   useEffect(() => saveReviews(reviews), [reviews])
   const addTask = (task) => setTasks((current) => [{ ...task, id: Date.now() }, ...current])
   const updateTask = (id, patch) => setTasks((current) => current.map((task) => task.id === id ? { ...task, ...patch } : task))
+  const deleteTask = (id) => setTasks((current) => current.filter((task) => task.id !== id))
+  const moveTask = (id, status, order) => setTasks((current) => current.map((task) => task.id === id ? { ...task, status, order } : task))
   const addReview = (review) => setReviews((current) => [{ ...review, id: Date.now(), date: new Date().toISOString().slice(0, 10) }, ...current])
   const clearTasks = () => setTasks([])
   const resetReviews = () => setReviews(seedReviews)
-  return <TaskContext.Provider value={{ tasks, setTasks, reviews, addTask, updateTask, addReview, clearTasks, resetReviews }}>{children}</TaskContext.Provider>
+  return <TaskContext.Provider value={{ tasks, setTasks, reviews, addTask, updateTask, deleteTask, moveTask, addReview, clearTasks, resetReviews }}>{children}</TaskContext.Provider>
 }
 export const useTasks = () => useContext(TaskContext)

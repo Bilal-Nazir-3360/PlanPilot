@@ -22,6 +22,18 @@ export function useApp() {
       taskState.addTask(task)
       toast.setToast('Task added to your workspace')
     },
+    updateTask: (id, patch) => {
+      taskState.updateTask(id, patch)
+      toast.setToast('Task updated')
+    },
+    deleteTask: (id) => {
+      taskState.deleteTask(id)
+      toast.setToast('Task deleted')
+    },
+    moveTask: (id, status, order) => {
+      taskState.moveTask(id, status, order)
+      toast.setToast('Task moved')
+    },
     addReview: (review) => {
       taskState.addReview(review)
       toast.setToast('Thanks for sharing your experience')

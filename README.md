@@ -17,7 +17,10 @@ A calm, focused task-management workspace for teams that want less noise and mor
 ## Highlights
 
 - Focused dashboard for tasks, projects, calendar, team, and analytics.
-- Kanban task workspace with search, priorities, due dates, tags, and drag-and-drop status updates.
+- Complete Kanban task workspace with create, edit, delete, search, priorities, due dates, tags, and status controls.
+- Real drag-and-drop with dnd-kit for reordering tasks and moving them between Todo, In progress, and Done.
+- Keyboard, pointer, and touch drag sensors with a visible drag overlay and empty-column drop targets.
+- Safe task-data migration for older `pp_tasks` records, including persisted ordering and new task descriptions.
 - Local demo authentication with protected dashboard routes.
 - Community reviews with star ratings and persistent submissions.
 - Dark/light theme with persistence and reduced-motion support.
@@ -33,6 +36,7 @@ A calm, focused task-management workspace for teams that want less noise and mor
 - Framer Motion
 - Recharts
 - Lucide React
+- dnd-kit
 - Tailwind CSS with custom CSS
 - Browser localStorage for the prototype
 
@@ -67,6 +71,19 @@ The prototype stores demo state in these browser keys:
 - `pp_tasks`
 - `pp_reviews`
 - `pp_theme`
+
+### Task workspace
+
+The Tasks page supports:
+
+- Creating tasks with title, description, status, priority, due date, project, and tag.
+- Editing and deleting existing tasks with accessible modal dialogs.
+- Searching by title, project, or tag.
+- Filtering by priority and project.
+- Reordering tasks within a column and moving them between columns with drag-and-drop.
+- Changing status directly from a task card for touch-friendly use.
+
+Drag-and-drop reordering is intentionally disabled while search or filters are active so visible ordering cannot conflict with hidden tasks. Clear the active filters to reorder the full board.
 
 ## Route map
 
