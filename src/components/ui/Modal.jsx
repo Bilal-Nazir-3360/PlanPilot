@@ -51,7 +51,7 @@ export default function Modal({ open = true, onClose, children, title, labelledB
 
   return <AnimatePresence>
     {open && <motion.div className="modal-back animated-modal-back" role="presentation" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduceMotion ? 0.15 : 0.25 }} onMouseDown={(event) => event.target === event.currentTarget && onClose?.()}>
-      <motion.div ref={dialogRef} className={`modal animated-modal ${className}`} role="dialog" aria-modal="true" aria-labelledby={titleId} layoutId={layoutId} initial={{ opacity: 0, y: reduceMotion ? 0 : 18, scale: reduceMotion ? 1 : 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: reduceMotion ? 0 : 12, scale: reduceMotion ? 1 : 0.98 }} transition={{ duration: reduceMotion ? 0.15 : 0.28 }} drag={touchDevice && !reduceMotion ? 'y' : false} dragConstraints={{ top: 0, bottom: 0 }} dragElastic={{ top: 0.04, bottom: 0.7 }} onDragEnd={dismiss}>
+      <motion.div ref={dialogRef} className={`modal animated-modal ${className}`} role="dialog" aria-modal="true" aria-labelledby={titleId} layoutId={layoutId} tabIndex={-1} onKeyDown={(event) => { if (event.key === 'Escape') onClose?.() }} initial={{ opacity: 0, y: reduceMotion ? 0 : 18, scale: reduceMotion ? 1 : 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: reduceMotion ? 0 : 12, scale: reduceMotion ? 1 : 0.98 }} transition={{ duration: reduceMotion ? 0.15 : 0.28 }} drag={touchDevice && !reduceMotion ? 'y' : false} dragConstraints={{ top: 0, bottom: 0 }} dragElastic={{ top: 0.04, bottom: 0.7 }} onDragEnd={dismiss}>
         {title && <h2 id={titleId} className="sr-only">{title}</h2>}
         {children}
       </motion.div>

@@ -25,6 +25,7 @@ A calm, focused task-management workspace for teams that want less noise and mor
 - Community reviews with star ratings and persistent submissions.
 - Dark/light theme with persistence and reduced-motion support.
 - Reusable SpotlightCard, tilt, reveal, animated Modal, and ConfirmDialog primitives with touch and accessibility support.
+- Premium `/features` page with honest Live/Preview/Coming soon badges, product mockup, category tabs, interactive sample demos, and roadmap.
 - Responsive public marketing pages, authentication screens, and workspace layouts.
 - Reusable contexts, services, UI components, and page modules ready for a future API.
 - Animated ambient background that adapts to the active theme without blocking interaction.
@@ -100,6 +101,8 @@ Drag-and-drop reordering is intentionally disabled while search or filters are a
 ### Workspace
 
 `/dashboard` · `/dashboard/tasks` · `/dashboard/projects` · `/dashboard/calendar` · `/dashboard/team` · `/dashboard/analytics` · `/dashboard/settings`
+
+The `/features` page is a product tour: live task and theme capabilities are marked separately from sample-data previews and future roadmap items.
 
 ## Project structure
 
