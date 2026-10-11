@@ -1,5 +1,6 @@
 import seedReviews from '../data/reviews'
 import { getItem, removeItem, setItem } from './storage'
+import validateReview, { cleanReview } from '../utils/validateReview'
 
 const REVIEWS_KEY = 'pp_reviews'
 let lastReviewSubmittedAt = 0
@@ -52,16 +53,23 @@ export const getReviewRateLimitRemaining = () => Math.max(0, 30000 - (Date.now()
 export const addReview = (review) => {
   const remaining = getReviewRateLimitRemaining()
   if (remaining > 0) return { reviews: getReviews(), error: `Please wait ${Math.ceil(remaining / 1000)} seconds before submitting another review.` }
-  const next = [normalizeReview(review), ...getReviews()]
+  const clean = cleanReview(review)
+  const errors = validateReview(clean)
+  if (Object.keys(errors).length) return { reviews: getReviews(), error: 'Please fix the highlighted review fields.' }
+  const next = [normalizeReview(clean), ...getReviews()]
   saveReviews(next)
   lastReviewSubmittedAt = Date.now()
   return { reviews: next, error: null }
 }
 
 export const updateReview = (id, changes) => {
-  const next = getReviews().map((review) => review.id === id ? normalizeReview({ ...review, ...changes }) : review)
+  const clean = cleanReview(changes)
+  const errors = validateReview(clean)
+  const current = getReviews()
+  if (Object.keys(errors).length) return { reviews: current, error: 'Please fix the highlighted review fields.' }
+  const next = current.map((review) => review.id === id ? normalizeReview({ ...review, ...clean }) : review)
   saveReviews(next)
-  return next
+  return { reviews: next, error: null }
 }
 
 export const deleteReview = (id) => {

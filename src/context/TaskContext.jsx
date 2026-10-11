@@ -17,7 +17,11 @@ export function TaskProvider({ children }) {
     setReviews(result.reviews)
     return result
   }
-  const updateReview = (id, changes) => setReviews(updateReviewInService(id, changes))
+  const updateReview = (id, changes) => {
+    const result = updateReviewInService(id, changes)
+    setReviews(result.reviews)
+    return result
+  }
   const deleteReview = (id) => setReviews(deleteReviewFromService(id))
   const clearTasks = () => setTasks([])
   const clearReviews = () => setReviews(clearReviewsFromService())
