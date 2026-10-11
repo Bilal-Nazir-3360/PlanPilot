@@ -6,7 +6,12 @@ const PlanContext = createContext(null)
 
 export function PlanProvider({ children }) {
   const [selection, setSelection] = useState(getPlan)
-  const plan = { ...planById[selection.planId], billingCycle: selection.billingCycle }
+  const plan = {
+    ...planById[selection.planId],
+    billingCycle: selection.billingCycle,
+    changedAt: selection.changedAt,
+    history: selection.history,
+  }
 
   const setPlan = (planId, billingCycle = 'monthly') => {
     const next = savePlan(planId, billingCycle)

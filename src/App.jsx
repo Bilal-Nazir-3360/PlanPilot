@@ -15,6 +15,7 @@ const Reviews = lazy(() => import('./pages/public/Reviews'))
 const Signup = lazy(() => import('./pages/public/Signup'))
 const Terms = lazy(() => import('./pages/public/Terms'))
 const Analytics = lazy(() => import('./pages/dashboard/Analytics'))
+const Billing = lazy(() => import('./pages/dashboard/Billing'))
 const Calendar = lazy(() => import('./pages/dashboard/Calendar'))
 const Dashboard = lazy(() => import('./pages/dashboard/Dashboard'))
 const DashPage = lazy(() => import('./pages/dashboard/DashPage'))
@@ -49,6 +50,7 @@ export default function App() {
           <Route path="/dashboard/calendar" element={<ProtectedRoute><DashPage title="Calendar" sub="See your work in time, not just in lists."><Calendar /></DashPage></ProtectedRoute>} />
           <Route path="/dashboard/team" element={<ProtectedRoute><DashPage title="Team" sub="The people making progress happen."><Team /></DashPage></ProtectedRoute>} />
           <Route path="/dashboard/analytics" element={<ProtectedRoute><DashPage title="Analytics" sub="Understand your momentum and improve it."><Analytics /></DashPage></ProtectedRoute>} />
+          <Route path="/dashboard/billing" element={<ProtectedRoute><DashPage title="Billing" sub="Explore your demo plan and workspace limits."><Billing /></DashPage></ProtectedRoute>} />
           <Route path="/dashboard/settings" element={<ProtectedRoute><DashPage title="Settings" sub="Your workspace, your way."><Settings /></DashPage></ProtectedRoute>} />
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -4,6 +4,7 @@ import { sortableKeyboardCoordinates, SortableContext, useSortable, verticalList
 import { CSS } from '@dnd-kit/utilities'
 import { MoreHorizontal, Pencil, Plus, Search, Trash2 } from 'lucide-react'
 import { useApp } from '../../context/AppContext'
+import { Link } from 'react-router-dom'
 import Button from '../../components/ui/Button'
 import DeleteConfirm from '../../components/ui/DeleteConfirm'
 import TaskModal from '../../components/ui/TaskModal'
@@ -33,7 +34,7 @@ function getStatusFromOver(over) {
 }
 
 export default function Tasks() {
-  const { tasks, setTasks, addTask, updateTask, deleteTask, moveTask, setToast } = useApp()
+  const { tasks, setTasks, addTask, updateTask, deleteTask, moveTask, setToast, canAddTask } = useApp()
   const [query, setQuery] = useState('')
   const [priority, setPriority] = useState('All')
   const [project, setProject] = useState('All')
@@ -41,6 +42,8 @@ export default function Tasks() {
   const [showModal, setShowModal] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState(null)
   const [activeId, setActiveId] = useState(null)
+  const [limitMessage, setLimitMessage] = useState('')
+  const activeTaskCount = tasks.filter((task) => task.status !== 'Done').length
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
     useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } }),
@@ -54,10 +57,23 @@ export default function Tasks() {
   })
   const activeTask = tasks.find((task) => task.id === activeId)
   const openCreate = () => {
+    if (!canAddTask(activeTaskCount)) {
+      setLimitMessage('Free plan limit reached. Complete or delete an active task, or upgrade to add more.')
+      return
+    }
+    setLimitMessage('')
     setModalTask(null)
     setShowModal(true)
   }
   const saveTask = (form) => {
+    if (!modalTask && !canAddTask(activeTaskCount)) {
+      setLimitMessage('Free plan limit reached. Complete or delete an active task, or upgrade to add more.')
+      return
+    }
+    if (modalTask && modalTask.status === 'Done' && form.status !== 'Done' && !canAddTask(activeTaskCount)) {
+      setLimitMessage('Free plan limit reached. Complete or delete an active task, or upgrade to move this task back to active.')
+      return
+    }
     if (modalTask) updateTask(modalTask.id, form)
     else addTask(form)
     setShowModal(false)
@@ -67,7 +83,14 @@ export default function Tasks() {
     deleteTask(deleteTarget.id)
     setDeleteTarget(null)
   }
-  const changeStatus = (task, status) => moveTask(task.id, status, tasks.filter((item) => item.status === status).length)
+  const changeStatus = (task, status) => {
+    if (task.status === 'Done' && status !== 'Done' && !canAddTask(activeTaskCount)) {
+      setLimitMessage('Free plan limit reached. Complete or delete an active task, or upgrade to move this task back to active.')
+      return
+    }
+    setLimitMessage('')
+    moveTask(task.id, status, tasks.filter((item) => item.status === status).length)
+  }
   const handleDragStart = ({ active }) => setActiveId(active.id)
   const handleDragCancel = () => setActiveId(null)
   const handleDragEnd = ({ active, over }) => {
@@ -76,6 +99,11 @@ export default function Tasks() {
     const task = tasks.find((item) => item.id === active.id)
     const status = getStatusFromOver(over)
     if (!task || !status) return
+    if (task.status === 'Done' && status !== 'Done' && !canAddTask(activeTaskCount)) {
+      setLimitMessage('Free plan limit reached. Complete or delete an active task, or upgrade to move this task back to active.')
+      return
+    }
+    setLimitMessage('')
     const nextTasks = status === task.status ? reorderTasks(tasks, active.id, over.id) : moveTaskInOrder(tasks, active.id, status, typeof over.id === 'number' ? over.id : null)
     if (nextTasks !== tasks) {
       setTasks(nextTasks)
@@ -85,6 +113,7 @@ export default function Tasks() {
 
   return <DndContext sensors={sensors} collisionDetection={closestCorners} onDragStart={handleDragStart} onDragCancel={handleDragCancel} onDragEnd={handleDragEnd}>
     <div className="page-toolbar"><div className="task-filters"><div className="search"><Search size={17}/><input placeholder="Search tasks..." value={query} onChange={(event) => setQuery(event.target.value)} aria-label="Search tasks"/></div><select value={priority} onChange={(event) => setPriority(event.target.value)} aria-label="Filter by priority"><option>All</option><option>High</option><option>Medium</option><option>Low</option></select><select value={project} onChange={(event) => setProject(event.target.value)} aria-label="Filter by project"><option>All</option>{projects.map((item) => <option key={item}>{item}</option>)}</select></div><Button onClick={openCreate}><Plus size={17}/> New task</Button></div>
+    {limitMessage && <p className="plan-limit-message" role="alert">{limitMessage} <Link to="/dashboard/billing">Upgrade</Link></p>}
     {isFiltered && <p className="filter-hint" role="status">Filtering is active. Drag-and-drop reordering is disabled until filters are cleared.</p>}
     {!filtered.length && <div className="empty-state" role="status">{tasks.length ? 'No tasks match your search or filters.' : 'No tasks yet. Create your first task to get started.'}<button className="text-link" onClick={openCreate}>Create a task</button></div>}
     <div className="kanban">{TASK_STATUSES.map((status) => <KanbanColumn key={status} status={status} tasks={filtered.filter((task) => task.status === status).sort((a, b) => a.order - b.order)} onEdit={(task) => { setModalTask(task); setShowModal(true) }} onDelete={setDeleteTarget} onStatusChange={changeStatus} onAdd={openCreate}/>)}</div>
