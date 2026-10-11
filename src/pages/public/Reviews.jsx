@@ -1,12 +1,39 @@
-import { useState } from 'react'
-import { Star } from 'lucide-react'
-import Button from '../../components/ui/Button'
+import { useRef, useState } from 'react'
 import Navbar from '../../components/layout/Navbar'
 import Footer from '../../components/layout/Footer'
+import useDocumentTitle from '../../hooks/useDocumentTitle'
 import { useApp } from '../../context/AppContext'
-import SpotlightCard from '../../components/ui/SpotlightCard'
-import Reveal from '../../components/ui/Reveal'
+import ReviewsHero from './reviews/ReviewsHero'
+import RatingSummary from './reviews/RatingSummary'
+import ReviewControls from './reviews/ReviewControls'
+import ReviewList from './reviews/ReviewList'
+import ReviewForm from './reviews/ReviewForm'
+import { filterByRating, sortReviews } from '../../utils/reviewStats'
 
-function Reviews(){const {reviews,addReview}=useApp();const [showAll,setShowAll]=useState(false);const [form,setForm]=useState({name:'',text:'',rating:5});const submit=e=>{e.preventDefault();if(!form.name.trim()||!form.text.trim())return;addReview(form);setForm({name:'',text:'',rating:5})};return <><Navbar/><main className="simple-page reviews-page"><div className="eyebrow">FROM THE COMMUNITY</div><h1>Loved by teams who care</h1><p className="simple-content">Real feedback from people turning plans into meaningful progress.</p><div className="review-grid">{reviews.slice(0,showAll?reviews.length:4).map(r=><Reveal key={r.id}><SpotlightCard as="article" className="review-card"><div className="stars">{Array.from({length:5},(_,i)=><Star key={i} size={15} fill={i<r.rating?'currentColor':'none'}/>)}</div><p>“{r.text}”</p><b>{r.name}</b><small>{r.date}</small></SpotlightCard></Reveal>)}</div><button className="btn ghost review-toggle" onClick={()=>setShowAll(!showAll)}>{showAll?'Show fewer':'Show all reviews'}</button><SpotlightCard as="form" className="review-form card" onSubmit={submit}><h2>Share your experience</h2><div className="form-row"><label>Name<input required value={form.name} onChange={e=>setForm({...form,name:e.target.value})}/></label><label>Rating<select value={form.rating} onChange={e=>setForm({...form,rating:Number(e.target.value)})}><option value="5">5 stars</option><option value="4">4 stars</option><option value="3">3 stars</option><option value="2">2 stars</option><option value="1">1 star</option></select></label></div><label>Your review<textarea required rows="4" value={form.text} onChange={e=>setForm({...form,text:e.target.value})}/></label><Button type="submit">Submit review <Star size={15}/></Button></SpotlightCard></main><Footer/></>}
+export default function Reviews() {
+  const { reviews, user } = useApp()
+  const formRef = useRef(null)
+  const [sortMode, setSortMode] = useState('newest')
+  const [rating, setRating] = useState('all')
+  const [search, setSearch] = useState('')
+  const [editing, setEditing] = useState(null)
+  const [highlighted, setHighlighted] = useState(null)
+  useDocumentTitle('Reviews — PlanPilot', 'Read honest sample and community reviews for the PlanPilot planning workspace.')
 
-export default Reviews
+  const clearFilters = () => { setSortMode('newest'); setRating('all'); setSearch('') }
+  const filtered = sortReviews(filterByRating(reviews, rating).filter((review) => `${review.name} ${review.comment}`.toLowerCase().includes(search.toLowerCase().trim())), sortMode)
+  const scrollToForm = () => formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  const afterSubmit = (review) => {
+    setHighlighted(review.id)
+    window.setTimeout(() => setHighlighted(null), 2600)
+    scrollToForm()
+  }
+
+  return <><Navbar/><main className="reviews-page">
+    <ReviewsHero onWrite={scrollToForm} />
+    <RatingSummary reviews={reviews} onRating={setRating} />
+    <ReviewControls sortMode={sortMode} setSortMode={setSortMode} rating={rating} setRating={setRating} search={search} setSearch={setSearch} clearFilters={clearFilters} total={reviews.length} shown={filtered.length} />
+    <ReviewList reviews={filtered} user={user} highlighted={highlighted} onEdit={setEditing} onClearFilters={clearFilters} />
+    <div ref={formRef}><ReviewForm user={user} editing={editing} onClose={() => setEditing(null)} onSuccess={afterSubmit} /></div>
+  </main><Footer/></>
+}

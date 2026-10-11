@@ -2,6 +2,7 @@ import seedReviews from '../data/reviews'
 import { getItem, removeItem, setItem } from './storage'
 
 const REVIEWS_KEY = 'pp_reviews'
+let lastReviewSubmittedAt = 0
 
 const cleanText = (value) => String(value ?? '').replace(/[\u0000-\u001f\u007f-\u009f]/g, '').replace(/\s+/g, ' ').trim()
 
@@ -46,10 +47,15 @@ export const saveReviews = (reviews) => {
   }
 }
 
+export const getReviewRateLimitRemaining = () => Math.max(0, 30000 - (Date.now() - lastReviewSubmittedAt))
+
 export const addReview = (review) => {
+  const remaining = getReviewRateLimitRemaining()
+  if (remaining > 0) return { reviews: getReviews(), error: `Please wait ${Math.ceil(remaining / 1000)} seconds before submitting another review.` }
   const next = [normalizeReview(review), ...getReviews()]
   saveReviews(next)
-  return next
+  lastReviewSubmittedAt = Date.now()
+  return { reviews: next, error: null }
 }
 
 export const updateReview = (id, changes) => {

@@ -12,7 +12,11 @@ export function TaskProvider({ children }) {
   const updateTask = (id, patch) => setTasks((current) => current.map((task) => task.id === id ? { ...task, ...patch } : task))
   const deleteTask = (id) => setTasks((current) => current.filter((task) => task.id !== id))
   const moveTask = (id, status, order) => setTasks((current) => current.map((task) => task.id === id ? { ...task, status, order } : task))
-  const addReview = (review) => setReviews(addReviewToService(review))
+  const addReview = (review) => {
+    const result = addReviewToService(review)
+    setReviews(result.reviews)
+    return result
+  }
   const updateReview = (id, changes) => setReviews(updateReviewInService(id, changes))
   const deleteReview = (id) => setReviews(deleteReviewFromService(id))
   const clearTasks = () => setTasks([])

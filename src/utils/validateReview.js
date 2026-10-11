@@ -4,7 +4,7 @@ export function cleanReview(review) {
   return {
     ...review,
     name: sanitize(review.name),
-    role: sanitize(review.role).slice(0, 60),
+    role: sanitize(review.role),
     comment: sanitize(review.comment ?? review.text),
   }
 }
