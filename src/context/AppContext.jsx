@@ -18,7 +18,7 @@ export function useApp() {
     ...plan,
     clearData: () => {
       taskState.clearTasks()
-      taskState.resetReviews()
+      taskState.clearReviews()
       plan.clearPlan()
       toast.setToast('Workspace data cleared')
     },
@@ -39,7 +39,7 @@ export function useApp() {
       toast.setToast('Task moved')
     },
     addReview: (review) => {
-      taskState.addReview(review)
+      taskState.addReview({ ...review, ownerId: auth.user?.email || null })
       toast.setToast('Thanks for sharing your experience')
     },
   }
