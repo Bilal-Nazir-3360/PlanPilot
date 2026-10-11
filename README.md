@@ -8,10 +8,6 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3.4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 ![Status: prototype](https://img.shields.io/badge/status-prototype-e2b659)
 
-Live demo: `<add Vercel link>`
-
-Screenshots: add images to `docs/screenshots/` when available.
-
 ## What it is
 
 PlanPilot is a React task-management workspace with a Kanban board, planning views, analytics, and a small public product site. It includes local demo authentication, reviews, and plan-based UI for exploring the workspace. This is a frontend-only prototype: data is stored in the browser, billing is a demo, and there is no backend yet.
@@ -24,10 +20,10 @@ PlanPilot is a React task-management workspace with a Kanban board, planning vie
 - Features page with live, preview, and coming-soon statuses plus interactive task demos.
 - Reviews with validated submissions, sample-review labels, sorting, rating filters, text search, rating summary, edit/delete controls for the signed-in user's reviews, and browser-only persistence.
 - Pricing page with Free, Pro, and Team demo plans, monthly/yearly display, comparison table, FAQ, and demo steps. No real payment flow.
-- Seeded tasks and projects are demo workspace data; seeded reviews are labeled "Sample review".
 
 ### Workspace
 
+- Seeded tasks and projects are demo workspace data; seeded reviews are labeled "Sample review".
 - Task CRUD with title, description, status, priority, due date, project, and tag fields.
 - dnd-kit drag-and-drop to reorder tasks within a status and move them between Todo, In progress, and Done.
 - Task search plus priority and project filters.
@@ -67,7 +63,7 @@ Open the local URL printed by Vite, usually `http://localhost:5173`.
 
 Demo login:
 
-- Use any valid email and any password in the login form.
+- Use `demo@planpilot.app` and any password in the login form.
 - Sign-up accepts `?plan=pro` or `?plan=team`, for example `/signup?plan=pro`.
 
 ## Route map
@@ -140,7 +136,7 @@ Only files under `src/services/` access `localStorage`; contexts and pages use t
 | --- | --- | --- |
 | Free | 25 active tasks, 1 workspace, task board/search, calendar, summary analytics cards | — |
 | Pro | Unlimited tasks, 1 workspace, priority/project filters, full analytics charts | Saved filter views, recurring tasks, priority support |
-| Team | Pro features plus 1 workspace, team directory/invites/roles, shared project progress | Activity log, real-time collaboration, admin controls |
+| Team | Everything in Pro, plus team directory, invites and roles, shared project progress | Activity log, real-time collaboration, admin controls |
 
 Plan selection is a demo. No payment is processed.
 
@@ -160,8 +156,7 @@ Plan selection is a demo. No payment is processed.
 - Recurring tasks
 - Projects CRUD
 - Team CRUD
-- Add a `LICENSE` file
 
-## Claims not verified in code
+## License
 
-- Live demo URL and screenshots are not available yet.
+MIT
