@@ -1,129 +1,167 @@
-<div align="center">
-
 # PlanPilot
 
-### Plan boldly. Ship clearly.
+> A focused task-management workspace for clearer planning and follow-through.
 
-PlanPilot is a focused task-management workspace for teams that want a clearer view of their work and less operational noise. It brings tasks, projects, planning, team activity, analytics, and product guidance into one calm, responsive interface.
+[![React 18](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-powered-646CFF?logo=vite&logoColor=white)](https://vite.dev/)
+[![Framer Motion](https://img.shields.io/badge/Framer%20Motion-animations-EF008F)](https://motion.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3.4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+![Status: prototype](https://img.shields.io/badge/status-prototype-e2b659)
 
-<p>
-  <img src="https://img.shields.io/badge/status-prototype-e2b659?style=for-the-badge" alt="Prototype status" />
-  <img src="https://img.shields.io/badge/React-18-61dafb?style=for-the-badge&logo=react&logoColor=white" alt="React 18" />
-  <img src="https://img.shields.io/badge/Vite-powered-646cff?style=for-the-badge&logo=vite&logoColor=white" alt="Vite powered" />
-</p>
+Live demo: `<add Vercel link>`
 
-</div>
+Screenshots: add images to `docs/screenshots/` when available.
 
-## Highlights
+## What it is
 
-- Focused dashboard for tasks, projects, calendar, team, and analytics.
-- Complete Kanban task workspace with create, edit, delete, search, priorities, due dates, tags, and status controls.
-- Real drag-and-drop with dnd-kit for reordering tasks and moving them between Todo, In progress, and Done.
-- Keyboard, pointer, and touch drag sensors with a visible drag overlay and empty-column drop targets.
-- Safe task-data migration for older `pp_tasks` records, including persisted ordering and new task descriptions.
-- Local demo authentication with protected dashboard routes.
-- Community reviews with star ratings and persistent submissions.
-- Dark/light theme with persistence and reduced-motion support.
-- Reusable SpotlightCard, tilt, reveal, animated Modal, and ConfirmDialog primitives with touch and accessibility support.
-- Premium `/features` page with honest Live/Preview/Coming soon badges, product mockup, category tabs, interactive sample demos, and roadmap.
-- Responsive public marketing pages, authentication screens, and workspace layouts.
-- Reusable contexts, services, UI components, and page modules ready for a future API.
-- Animated ambient background that adapts to the active theme without blocking interaction.
-- Visual animations respect reduced-motion preferences and keep draggable task cards sensor-safe.
-- Route pages are lazy-loaded and production dependencies are split into React, motion, charts, and dnd vendor chunks to reduce the initial bundle.
+PlanPilot is a React task-management workspace with a Kanban board, planning views, analytics, and a small public product site. It includes local demo authentication, reviews, and plan-based UI for exploring the workspace. This is a frontend-only prototype: data is stored in the browser, billing is a demo, and there is no backend yet.
+
+## Features
+
+### Public site
+
+- Home, Features, Pricing, Reviews, About, Contact, Privacy, and Terms pages.
+- Features page with live, preview, and coming-soon statuses plus interactive task demos.
+- Reviews with validated submissions, sample-review labels, sorting, rating filters, text search, rating summary, edit/delete controls for the signed-in user's reviews, and browser-only persistence.
+- Pricing page with Free, Pro, and Team demo plans, monthly/yearly display, comparison table, FAQ, and demo steps. No real payment flow.
+- Seeded tasks and projects are demo workspace data; seeded reviews are labeled "Sample review".
+
+### Workspace
+
+- Task CRUD with title, description, status, priority, due date, project, and tag fields.
+- dnd-kit drag-and-drop to reorder tasks within a status and move them between Todo, In progress, and Done.
+- Task search plus priority and project filters.
+- Calendar, Projects, Team, Analytics, Overview, and Settings pages.
+- Theme switching between dark and light modes.
+- Protected dashboard routes with local demo authentication.
+
+### Plans (demo)
+
+- Free, Pro, and Team plan selection with monthly/yearly display and browser-only plan-change history.
+- Free active-task limit of 25; existing tasks are not deleted on downgrade.
+- Free analytics shows summary cards while Pro and Team can view charts.
+- Team invites are available on Team and show an upgrade prompt on Free and Pro.
+- Billing page with current-plan usage, plan switching, confirmation dialog, and demo history.
 
 ## Tech stack
 
-- React 18 and Vite
-- React Router
-- Context API
+- React 18, React Router, and Vite
+- Context API for auth, tasks/reviews, theme, toast, and plan state
 - Framer Motion
-- Recharts
-- Lucide React
-- dnd-kit
 - Tailwind CSS with custom CSS
-- Browser localStorage for the prototype
-
-> PlanPilot currently runs as a frontend prototype. The service layer is intentionally separated so authentication and persistence can later move to an Express/MongoDB API without rewriting the UI.
+- dnd-kit for drag-and-drop
+- Recharts for analytics
+- Lucide React icons
+- Browser `localStorage` through the service layer
 
 ## Run locally
 
 ```bash
 npm install
 npm run dev
-```
-
-Open the local URL printed by Vite, usually `http://localhost:5173`.
-
-Create a production build:
-
-```bash
 npm run build
 npm run preview
 ```
 
-## Demo flow
+Open the local URL printed by Vite, usually `http://localhost:5173`.
 
-1. Open `/login` or `/signup`.
-2. Use any valid-looking email and password.
-3. Continue to the protected `/dashboard`.
-4. Explore tasks, projects, calendar, team, analytics, and settings.
+Demo login:
 
-The prototype stores demo state in these browser keys:
-
-- `pp_user`
-- `pp_tasks`
-- `pp_reviews`
-- `pp_theme`
-
-### Task workspace
-
-The Tasks page supports:
-
-- Creating tasks with title, description, status, priority, due date, project, and tag.
-- Editing and deleting existing tasks with accessible modal dialogs.
-- Searching by title, project, or tag.
-- Filtering by priority and project.
-- Reordering tasks within a column and moving them between columns with drag-and-drop.
-- Changing status directly from a task card for touch-friendly use.
-
-Drag-and-drop reordering is intentionally disabled while search or filters are active so visible ordering cannot conflict with hidden tasks. Clear the active filters to reorder the full board.
+- Use any valid email and any password in the login form.
+- Sign-up accepts `?plan=pro` or `?plan=team`, for example `/signup?plan=pro`.
 
 ## Route map
 
-### Public
+### Public and authentication
 
-`/` · `/features` · `/pricing` · `/reviews` · `/about` · `/contact` · `/privacy` · `/terms`
+| Route | Page |
+| --- | --- |
+| `/` | Home |
+| `/features` | Features |
+| `/pricing` | Pricing |
+| `/reviews` | Reviews |
+| `/about` | About |
+| `/contact` | Contact |
+| `/privacy` | Privacy |
+| `/terms` | Terms |
+| `/login` | Login |
+| `/signup` | Signup |
 
-### Authentication
+### Dashboard
 
-`/login` · `/signup`
+| Route | Page |
+| --- | --- |
+| `/dashboard` | Dashboard overview |
+| `/dashboard/tasks` | Tasks |
+| `/dashboard/projects` | Projects |
+| `/dashboard/calendar` | Calendar |
+| `/dashboard/team` | Team |
+| `/dashboard/analytics` | Analytics |
+| `/dashboard/billing` | Demo billing |
+| `/dashboard/settings` | Settings |
 
-### Workspace
-
-`/dashboard` · `/dashboard/tasks` · `/dashboard/projects` · `/dashboard/calendar` · `/dashboard/team` · `/dashboard/analytics` · `/dashboard/settings`
-
-The `/features` page is a product tour: live task and theme capabilities are marked separately from sample-data previews and future roadmap items. Live feature details link directly into the demo login flow.
+Dashboard routes require the local demo user.
 
 ## Project structure
 
 ```text
 src/
-├── App.jsx                 # Route definitions
-├── main.jsx                # React bootstrap, router, providers, styles
-├── components/             # Layouts, animated UI primitives, ambient background
-├── context/                # Auth, task, theme, and toast state
-├── data/                   # Seed tasks, projects, reviews, and workspace data
-├── pages/                  # Public and dashboard pages
-├── routes/                 # Protected route guard
-├── services/               # Storage, auth, task, and review boundaries
-└── styles.css              # Global visual system and responsive styles
+├── App.jsx
+├── main.jsx
+├── components/
+│   ├── layout/
+│   └── ui/
+├── context/
+├── data/
+├── hooks/
+├── pages/
+│   ├── dashboard/
+│   └── public/
+├── routes/
+├── services/
+└── utils/
 ```
 
-## Project status
+## Data and persistence
 
-PlanPilot is a polished product-flow prototype designed to demonstrate a focused team workspace. It does not yet include a production database, remote authentication, billing, or server-side APIs.
+Only files under `src/services/` access `localStorage`; contexts and pages use those services.
 
----
+| Key | Stored data | Service |
+| --- | --- | --- |
+| `pp_user` | Local demo user | `authService.js` |
+| `pp_tasks` | Tasks and task ordering | `taskService.js` |
+| `pp_reviews` | Seeded and user-submitted reviews | `reviewService.js` |
+| `pp_theme` | `dark` or `light` theme | `storage.js` via `ThemeContext` |
+| `pp_plan` | Selected plan, billing cycle, and plan-change history | `planService.js` |
 
-Built with React, Vite, and a bias toward calmer workdays.
+## Plans and limits
+
+| Plan | Current limits and live behavior | Coming soon |
+| --- | --- | --- |
+| Free | 25 active tasks, 1 workspace, task board/search, calendar, summary analytics cards | — |
+| Pro | Unlimited tasks, 1 workspace, priority/project filters, full analytics charts | Saved filter views, recurring tasks, priority support |
+| Team | Pro features plus 1 workspace, team directory/invites/roles, shared project progress | Activity log, real-time collaboration, admin controls |
+
+Plan selection is a demo. No payment is processed.
+
+## Accessibility and performance
+
+- Reduced-motion preferences are respected by the implemented animations.
+- Task drag-and-drop includes keyboard sensors.
+- Route pages are lazy-loaded with a loading fallback.
+- Production vendor chunks split React, motion, charts, and dnd-kit dependencies.
+
+## Roadmap
+
+- Express and MongoDB backend with JWT authentication
+- Vitest and React Testing Library tests
+- GitHub Actions CI
+- Real-time collaboration
+- Recurring tasks
+- Projects CRUD
+- Team CRUD
+- Add a `LICENSE` file
+
+## Claims not verified in code
+
+- Live demo URL and screenshots are not available yet.
