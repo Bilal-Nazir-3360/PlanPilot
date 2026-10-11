@@ -2,20 +2,24 @@ import { useAuth } from './AuthContext'
 import { useTasks } from './TaskContext'
 import { useTheme } from './ThemeContext'
 import { useToast } from './ToastContext'
+import { usePlan } from './PlanContext'
 
 export function useApp() {
   const auth = useAuth()
   const taskState = useTasks()
   const theme = useTheme()
   const toast = useToast()
+  const plan = usePlan()
   return {
     ...taskState,
     ...theme,
     ...auth,
     ...toast,
+    ...plan,
     clearData: () => {
       taskState.clearTasks()
       taskState.resetReviews()
+      plan.clearPlan()
       toast.setToast('Workspace data cleared')
     },
     addTask: (task) => {
