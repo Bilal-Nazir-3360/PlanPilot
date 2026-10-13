@@ -3,6 +3,7 @@ import { useTasks } from './TaskContext'
 import { useTheme } from './ThemeContext'
 import { useToast } from './ToastContext'
 import { usePlan } from './PlanContext'
+import { clearMessages } from '../services/contactService'
 
 export function useApp() {
   const auth = useAuth()
@@ -20,6 +21,7 @@ export function useApp() {
       taskState.clearTasks()
       taskState.clearReviews()
       plan.clearPlan()
+      clearMessages()
       toast.setToast('Workspace data cleared')
     },
     addTask: (task) => {

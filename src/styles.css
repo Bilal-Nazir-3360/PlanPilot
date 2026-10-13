@@ -193,6 +193,33 @@ textarea:focus-visible,input:focus-visible,select:focus-visible,button:focus-vis
 .final-home-card p{max-width:500px;color:#a6abb9;line-height:1.55;margin-bottom:0}
 .final-home-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:10px}
 .lazy-section-placeholder{height:260px}
+.contact-layout{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr);gap:28px;margin-top:52px;align-items:start}
+.contact-form{display:grid;gap:17px}
+.contact-form label{display:grid;gap:8px;font-size:.82rem;color:#aeb3c0}
+.contact-form textarea{width:100%;resize:vertical;min-height:140px;background:#0e1117;border:1px solid #303542;color:#f4f1ea;border-radius:6px;padding:11px;font:inherit;outline:0}
+.contact-form input:focus,.contact-form textarea:focus{border-color:#e2b659}
+.form-error{color:#ed8f90;font-size:.75rem}
+.form-status{min-height:1.1em;color:#ed8f90;font-size:.8rem}
+.character-counter{color:#73798b;font-size:.72rem}
+.contact-honeypot{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.contact-info{display:grid;gap:14px}
+.contact-info h2{font:600 clamp(1.6rem,3vw,2.35rem) 'Space Grotesk';margin:0}
+.contact-info>p{color:#a6abb9;line-height:1.65;margin:0 0 8px}
+.contact-links{display:grid;gap:10px}
+.contact-link-card{display:flex;align-items:center;gap:12px;padding:16px;color:#e2b659}
+.contact-link-card span{display:grid;gap:4px;min-width:0;flex:1}
+.contact-link-card strong{font:600 .9rem 'Space Grotesk'}
+.contact-link-card small{color:#a6abb9;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.contact-success{display:grid;justify-items:start;gap:14px}
+.contact-success>svg{color:#62c69d}
+.contact-success h2{font:600 1.8rem 'Space Grotesk';margin:0}
+.contact-success p{color:#a6abb9;line-height:1.6;margin:0}
+.contact-success-links{display:flex;flex-wrap:wrap;gap:16px}
+.contact-success-links a{color:#e2b659;min-height:44px;display:inline-flex;align-items:center}
+.light .contact-form textarea,.light .contact-form input{background:#fff;border-color:#c9c4b9;color:#201e1a}
+.light .contact-info>p,.light .contact-success p{color:#626879}
+.light .contact-link-card small{color:#626879}
+@media(max-width:800px){.contact-layout{grid-template-columns:1fr;margin-top:38px}}
 @keyframes home-gradient{from{opacity:.55}to{opacity:1}}
 .light .preview-board,.light .how-card,.light .final-home-card{background:#fff;border-color:#d9d4c8}
 .light .preview-column{background:#f2f0eb}

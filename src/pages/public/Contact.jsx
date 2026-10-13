@@ -1,10 +1,13 @@
-import { Mail } from 'lucide-react'
-import Button from '../../components/ui/Button'
-import Navbar from '../../components/layout/Navbar'
+import { useState } from 'react'
 import Footer from '../../components/layout/Footer'
-import { useApp } from '../../context/AppContext'
-import SpotlightCard from '../../components/ui/SpotlightCard'
+import Navbar from '../../components/layout/Navbar'
+import useDocumentTitle from '../../hooks/useDocumentTitle'
+import ContactForm from './contact/ContactForm'
+import ContactInfo from './contact/ContactInfo'
+import SuccessState from './contact/SuccessState'
 
-function Contact(){const {setToast}=useApp();const submit=e=>{e.preventDefault();e.currentTarget.reset();setToast('Message sent — we will be in touch soon')};return <><Navbar/><main id="main" className="simple-page contact-page"><div className="eyebrow">GET IN TOUCH</div><h1>Let’s talk</h1><p className="simple-content">Questions, partnerships, or just want to say hello? Send us a message and our team will get back to you.</p><SpotlightCard as="form" className="contact-form card" onSubmit={submit}><label>Name<input required name="name" autoComplete="name"/></label><label>Email<input required name="email" type="email" autoComplete="email"/></label><label>Message<textarea required name="message" rows="5"/></label><Button type="submit"><Mail size={15}/> Send message</Button></SpotlightCard></main><Footer/></>}
-
-export default Contact
+export default function Contact() {
+  const [sent, setSent] = useState(false)
+  useDocumentTitle('Contact — PlanPilot', 'Save a message locally in the PlanPilot browser demo and find direct project contact links.')
+  return <><Navbar /><main id="main" className="simple-page contact-page"><div className="eyebrow">GET IN TOUCH</div><h1>Let’s talk</h1><p className="simple-content">Questions, feedback, bug reports, or hiring conversations? Save a note locally in this browser demo.</p><div className="contact-layout"><div>{sent ? <SuccessState onSendAnother={() => setSent(false)} /> : <ContactForm onSuccess={() => setSent(true)} />}</div><ContactInfo /></div></main><Footer /></>
+}
