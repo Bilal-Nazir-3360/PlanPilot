@@ -19,7 +19,11 @@ export default function Modal({ open = true, onClose, children, title, labelledB
     const previous = document.activeElement
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
-    const focusDialog = () => dialogRef.current?.querySelector(focusableSelector)?.focus()
+    const focusDialog = () => {
+      const firstFocusable = dialogRef.current?.querySelector(focusableSelector)
+      if (firstFocusable) firstFocusable.focus()
+      else dialogRef.current?.focus()
+    }
     const timer = window.setTimeout(focusDialog, 0)
     const onKeyDown = (event) => {
       if (event.key === 'Escape') onClose?.()

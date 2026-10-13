@@ -35,7 +35,7 @@ export default function Reviews() {
     scrollToForm()
   }
 
-  return <><Navbar/><main className="reviews-page">
+  return <><Navbar/><main id="main" className="reviews-page">
     <ReviewsHero onWrite={scrollToForm} />
     <RatingSummary reviews={reviews} onRating={setRating} />
     <ReviewControls sortMode={sortMode} setSortMode={setSortMode} rating={rating} setRating={setRating} search={search} setSearch={setSearch} clearFilters={clearFilters} total={reviews.length} shown={filtered.length} />

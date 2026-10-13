@@ -12,7 +12,7 @@ export default function Pricing() {
   return (
     <>
       <Navbar />
-      <main className="pricing-page">
+      <main id="main" className="pricing-page">
         <PricingHero />
         <ComparisonTable />
         <DemoSteps />
