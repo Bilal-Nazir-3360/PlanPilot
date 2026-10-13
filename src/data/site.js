@@ -4,6 +4,7 @@ export const githubUrl = 'https://github.com/Bilal-Nazir-3360'
 export const linkedinUrl = 'https://www.linkedin.com/in/mbilal-nazir/'
 export const contactEmail = 'bachohan786@gmail.com'
 export const authorName = 'Muhammad Bilal Nazir'
+export const privacyLastUpdated = '2026-10-13'
 export const aboutStory = {
   whyBuilt: '[Edit this paragraph with why you built PlanPilot and what problem you wanted to explore.]',
   learned: '[Edit this paragraph with the product, React architecture, or accessibility lessons you learned.]',
