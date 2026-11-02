@@ -1,6 +1,6 @@
 export const siteName = 'PlanPilot'
 export const tagline = 'A focused task-management workspace for clearer planning and follow-through.'
-export const githubUrl = 'https://github.com/your-username'
+export const githubUrl = 'https://github.com/Bilal-Nazir-3360'
 export const linkedinUrl = 'https://www.linkedin.com/in/your-profile'
 export const contactEmail = 'your-email@example.com'
 export const authorName = 'Your Name'
@@ -10,6 +10,8 @@ export const aboutStory = {
   learned: '[Edit this paragraph with the product, React architecture, or accessibility lessons you learned.]',
   improve: '[Edit this paragraph with the next product or engineering improvements you would make.]',
 }
+
+export const isRealValue = (value) => Boolean(value && !/^\[.*\]$/.test(value) && !/^your[- ]/i.test(value) && !/example\.com|your-profile|your-username/i.test(value))
 
 export const navLinks = [
   { label: 'Features', to: '/features' },
