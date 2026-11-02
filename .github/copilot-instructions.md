@@ -12,3 +12,4 @@ React 18 + Vite, React Router, Framer Motion, Tailwind + custom CSS in src/style
 - Gold is an accent for one primary action per view. No gradient text, no glow blobs. Spotlight glow only on a few key cards.
 - One signature motion per page; everything else is quiet.
 - Copy is plain and specific. No words like unlock, supercharge, seamless, revolutionize.
+
