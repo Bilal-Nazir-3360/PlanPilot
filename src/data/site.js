@@ -1,9 +1,9 @@
 export const siteName = 'PlanPilot'
 export const tagline = 'A focused task-management workspace for clearer planning and follow-through.'
-export const githubUrl = 'https://github.com/Bilal-Nazir-3360'
-export const linkedinUrl = 'https://www.linkedin.com/in/mbilal-nazir/'
-export const contactEmail = 'bachohan786@gmail.com'
-export const authorName = 'Muhammad Bilal Nazir'
+export const githubUrl = 'https://github.com/your-username'
+export const linkedinUrl = 'https://www.linkedin.com/in/your-profile'
+export const contactEmail = 'your-email@example.com'
+export const authorName = 'Your Name'
 export const privacyLastUpdated = '2026-10-13'
 export const aboutStory = {
   whyBuilt: '[Edit this paragraph with why you built PlanPilot and what problem you wanted to explore.]',

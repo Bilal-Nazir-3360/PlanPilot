@@ -23,7 +23,7 @@ export default function Navbar() {
   }, [])
 
   useEffect(() => {
-    setOpen(false)
+    if (open) closeMenu()
   }, [location.pathname])
 
   useEffect(() => {
@@ -33,7 +33,22 @@ export default function Navbar() {
     const focusTarget = menuRef.current?.querySelector('a, button')
     focusTarget?.focus()
     const onKeyDown = (event) => {
-      if (event.key === 'Escape') closeMenu()
+      if (event.key === 'Escape') {
+        closeMenu()
+        return
+      }
+      if (event.key !== 'Tab') return
+      const focusable = [...menuRef.current.querySelectorAll('a, button')].filter((element) => !element.disabled)
+      if (!focusable.length) return
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault()
+        last.focus()
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault()
+        first.focus()
+      }
     }
     const onPointerDown = (event) => {
       if (!menuRef.current?.contains(event.target) && !menuButtonRef.current?.contains(event.target)) closeMenu()
@@ -57,7 +72,7 @@ export default function Navbar() {
     <nav className="public-nav" aria-label="Primary navigation">
       <Link to="/" className="brand" onClick={closeMenu}><span>✦</span> {siteName}</Link>
       <div className="desktop-nav-links">
-        {navLinks.map(({ label, to }) => <NavLink key={to} to={to} className="public-nav-link">{({ isActive }) => <>{label}{isActive && <motion.span className="nav-active-indicator" layoutId="public-nav-indicator" />}</>}</NavLink>)}
+        {navLinks.map(({ label, to }, index) => <NavLink key={to} to={to} className={({ isActive }) => `public-nav-link${isActive ? ' active' : ''}`}>{({ isActive }) => <><span className="nav-number">{String(index + 1).padStart(2, '0')}</span>{label}{isActive && <motion.span className="nav-active-indicator" layoutId="public-nav-indicator" />}</>}</NavLink>)}
       </div>
       <div className="nav-actions">
         <ThemeToggle />
@@ -67,8 +82,8 @@ export default function Navbar() {
       </div>
     </nav>
     <AnimatePresence>
-      {open && <motion.div ref={menuRef} id="mobile-navigation" className="mobile-nav-sheet" initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.2 }}>
-        {navLinks.map(({ label, to }) => <NavLink key={to} to={to} onClick={closeMenu} className="mobile-nav-link">{label}</NavLink>)}
+      {open && <motion.div ref={menuRef} id="mobile-navigation" className="mobile-nav-sheet" onPointerDown={(event) => { if (event.target === event.currentTarget) closeMenu() }} initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.2 }}>
+        {navLinks.map(({ label, to }, index) => <NavLink key={to} to={to} onClick={closeMenu} className={({ isActive }) => `mobile-nav-link${isActive ? ' active' : ''}`}><span>{String(index + 1).padStart(2, '0')}</span>{label}</NavLink>)}
         <NavLink to={user ? '/dashboard' : '/login'} onClick={closeMenu} className="mobile-nav-link">{user ? 'Dashboard' : 'Login'}</NavLink>
         <Link to={destination} onClick={closeMenu} className="nav-cta-link"><Button>{user ? 'Dashboard' : 'Try demo'} <ArrowRight size={15} /></Button></Link>
       </motion.div>}
