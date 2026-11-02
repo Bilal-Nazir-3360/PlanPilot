@@ -137,6 +137,7 @@ export function AmbientBackground() {
   return (
     <canvas
       ref={canvasRef}
+      className="ambient-background"
       aria-hidden="true"
       style={{
         position: 'fixed',

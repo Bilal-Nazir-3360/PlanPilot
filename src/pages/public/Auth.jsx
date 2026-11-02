@@ -11,7 +11,7 @@ import useDocumentTitle from '../../hooks/useDocumentTitle'
 import { hasAuthErrors, passwordStrength, validateLogin, validateSignup } from '../../utils/validateAuth'
 
 function AuthBenefits({ mode }) {
-  return <Reveal className="auth-benefits"><div className="eyebrow">A CALMER START</div><h2>{mode === 'login' ? 'Pick up where you left off.' : 'Make space for focused work.'}</h2><p>PlanPilot keeps tasks, projects, and progress together in one focused workspace.</p><ul><li><ShieldCheck size={18} /> Demo auth stays in this browser.</li><li><ShieldCheck size={18} /> No real accounts or emails are sent.</li><li><ShieldCheck size={18} /> Try the workspace without setup.</li></ul></Reveal>
+  return <Reveal className="auth-benefits"><div className="eyebrow">A CALMER START</div><h2>{mode === 'login' ? 'Pick up where you left off.' : 'Make space for focused work.'}</h2><p>PlanPilot keeps tasks, projects, and progress together in one focused workspace.</p><ul><li><ShieldCheck size={18} /> Demo auth stays in this browser.</li><li><ShieldCheck size={18} /> Your tasks and plan are saved in this browser.</li><li><ShieldCheck size={18} /> Try the workspace without setup.</li></ul></Reveal>
 }
 
 function Auth({ mode }) {

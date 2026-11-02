@@ -20,6 +20,7 @@ const sections = [
 function SectionRail() {
   const [active, setActive] = useState('product')
   const [heroVisible, setHeroVisible] = useState(true)
+  const [endingVisible, setEndingVisible] = useState(false)
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -31,19 +32,33 @@ function SectionRail() {
       if (section) observer.observe(section)
     })
     observeSections()
-    const mutations = new MutationObserver(observeSections)
+    const observeEnding = () => {
+      const finalCta = document.getElementById('start')
+      const footer = document.querySelector('.site-footer')
+      if (finalCta) endingObserver.observe(finalCta)
+      if (footer) endingObserver.observe(footer)
+    }
+    const mutations = new MutationObserver(() => {
+      observeSections()
+      observeEnding()
+    })
     mutations.observe(document.getElementById('main'), { childList: true, subtree: true })
     const heroObserver = new IntersectionObserver(([entry]) => setHeroVisible(entry.isIntersecting), { threshold: 0 })
     const hero = document.getElementById('product')
     if (hero) heroObserver.observe(hero)
+    const endingObserver = new IntersectionObserver((entries) => {
+      setEndingVisible(entries.some((entry) => entry.isIntersecting))
+    }, { threshold: 0 })
+    observeEnding()
     return () => {
       observer.disconnect()
       heroObserver.disconnect()
+      endingObserver.disconnect()
       mutations.disconnect()
     }
   }, [])
 
-  return <nav className={`section-rail ${heroVisible ? '' : 'is-visible'}`} aria-label="Home page sections">
+  return <nav className={`section-rail ${heroVisible ? '' : 'is-visible'} ${endingVisible ? 'is-hidden' : ''}`} aria-label="Home page sections">
     <ol>{sections.map(([id, label]) => <li key={id} className={active === id ? 'active' : ''}><a href={`#${id}`}><span className="section-rail-label">{label}</span><span className="section-rail-marker" /></a></li>)}</ol>
   </nav>
 }
