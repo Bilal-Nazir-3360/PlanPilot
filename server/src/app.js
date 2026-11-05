@@ -5,6 +5,7 @@ import helmet from "helmet";
 import mongoose from "mongoose";
 import morgan from "morgan";
 import authRoutes from "./routes/authRoutes.js";
+import taskRoutes from "./routes/taskRoutes.js";
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.get("/api/health", (_req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/tasks", taskRoutes);
 
 app.use((_req, res) => {
   res.status(404).json({ message: "Not found" });
