@@ -9,7 +9,7 @@ import Button from '../ui/Button'
 import ThemeToggle from '../ui/ThemeToggle'
 
 export default function Navbar() {
-  const { user, demoLogin, logout, setToast } = useApp()
+  const { user, loading, demoLogin, logout, setToast } = useApp()
   const location = useLocation()
   const navigate = useNavigate()
   const [open, setOpen] = useState(false)
@@ -68,11 +68,15 @@ export default function Navbar() {
     setOpen(false)
     menuButtonRef.current?.focus()
   }
-  const tryDemo = () => {
-    demoLogin()
-    setToast('Demo account ready')
-    closeMenu()
-    navigate('/dashboard')
+  const tryDemo = async () => {
+    try {
+      await demoLogin()
+      setToast('Demo account ready')
+      closeMenu()
+      navigate('/dashboard')
+    } catch (error) {
+      setToast(error.message || 'Unable to start the demo account')
+    }
   }
 
   return <><a className="skip-link" href="#main">Skip to content</a><header className={`public-header ${scrolled ? 'is-scrolled' : ''}`}>
@@ -83,14 +87,14 @@ export default function Navbar() {
       </div>
       <div className="nav-actions">
         <ThemeToggle />
-        {user ? <><Link to="/dashboard" className="nav-cta-link"><Button>Dashboard <ArrowRight size={15} /></Button></Link><button type="button" className="nav-account-link nav-text-button" onClick={logout}>Log out</button></> : <><Link to="/login" className="nav-account-link">Log in</Link><Link to="/signup" className="nav-account-link nav-signup-link">Sign up</Link><button type="button" className="nav-cta-link nav-text-button" onClick={tryDemo}><Button type="button">Try demo <ArrowRight size={15} /></Button></button></>}
+        {!loading && (user ? <><Link to="/dashboard" className="nav-cta-link"><Button>Dashboard <ArrowRight size={15} /></Button></Link><button type="button" className="nav-account-link nav-text-button" onClick={logout}>Log out</button></> : <><Link to="/login" className="nav-account-link">Log in</Link><Link to="/signup" className="nav-account-link nav-signup-link">Sign up</Link><button type="button" className="nav-cta-link nav-text-button" onClick={tryDemo}><Button type="button">Try demo <ArrowRight size={15} /></Button></button></>)}
         <button ref={menuButtonRef} type="button" className="icon-btn mobile-menu" onClick={() => setOpen((current) => !current)} aria-label={open ? 'Close navigation' : 'Open navigation'} aria-expanded={open} aria-controls="mobile-navigation">{open ? <X /> : <Menu />}</button>
       </div>
     </nav>
     <AnimatePresence>
       {open && <motion.div ref={menuRef} id="mobile-navigation" className="mobile-nav-sheet" onPointerDown={(event) => { if (event.target === event.currentTarget) closeMenu() }} initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.2 }}>
         {navLinks.map(({ label, to }, index) => <NavLink key={to} to={to} onClick={closeMenu} className={({ isActive }) => `mobile-nav-link${isActive ? ' active' : ''}`}><span>{String(index + 1).padStart(2, '0')}</span>{label}</NavLink>)}
-        {user ? <><NavLink to="/dashboard" onClick={closeMenu} className="mobile-nav-link">Dashboard</NavLink><button type="button" onClick={() => { logout(); closeMenu() }} className="mobile-nav-link mobile-nav-button">Log out</button></> : <><NavLink to="/login" onClick={closeMenu} className="mobile-nav-link">Log in</NavLink><NavLink to="/signup" onClick={closeMenu} className="mobile-nav-link">Sign up</NavLink><button type="button" onClick={tryDemo} className="nav-cta-link nav-text-button"><Button type="button">Try demo <ArrowRight size={15} /></Button></button></>}
+        {!loading && (user ? <><NavLink to="/dashboard" onClick={closeMenu} className="mobile-nav-link">Dashboard</NavLink><button type="button" onClick={() => { logout(); closeMenu() }} className="mobile-nav-link mobile-nav-button">Log out</button></> : <><NavLink to="/login" onClick={closeMenu} className="mobile-nav-link">Log in</NavLink><NavLink to="/signup" onClick={closeMenu} className="mobile-nav-link">Sign up</NavLink><button type="button" onClick={tryDemo} className="nav-cta-link nav-text-button"><Button type="button">Try demo <ArrowRight size={15} /></Button></button></>)}
       </motion.div>}
     </AnimatePresence>
   </header></>

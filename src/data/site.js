@@ -9,6 +9,7 @@ export const location = 'Based in Pakistan, open to remote work'
 export const roleLine = 'CS graduate, full-stack and AI/ML developer'
 export const lookingFor = 'Associate Software Engineer, full-stack (MERN), frontend, backend, and junior AI/ML roles'
 export const privacyLastUpdated = '2026-10-13'
+export const demoPassword = 'planpilot-demo'
 export const aboutStory = {
   heroLine: 'PlanPilot is a task-management app I built to practise product design, React architecture, and accessible UI. For now it runs entirely in the browser.',
   why: 'I built PlanPilot to show that I can design and build a complete product interface, not just single components. A task manager is familiar enough that anyone can judge it quickly, and it covers the front-end work I wanted to practise: routing, shared state, forms, drag-and-drop, and a consistent visual system.',
