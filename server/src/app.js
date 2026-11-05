@@ -6,8 +6,10 @@ import mongoose from "mongoose";
 import morgan from "morgan";
 import authRoutes from "./routes/authRoutes.js";
 import contactRoutes from "./routes/contactRoutes.js";
+import projectRoutes from "./routes/projectRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
+import teamRoutes from "./routes/teamRoutes.js";
 
 const app = express();
 
@@ -41,6 +43,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/tasks", taskRoutes);
+app.use("/api/projects", projectRoutes);
+app.use("/api/team", teamRoutes);
 
 app.use((_req, res) => {
   res.status(404).json({ message: "Not found" });
