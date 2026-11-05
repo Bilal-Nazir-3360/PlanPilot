@@ -5,6 +5,8 @@ import helmet from "helmet";
 import mongoose from "mongoose";
 import morgan from "morgan";
 import authRoutes from "./routes/authRoutes.js";
+import contactRoutes from "./routes/contactRoutes.js";
+import reviewRoutes from "./routes/reviewRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
 
 const app = express();
@@ -36,6 +38,8 @@ app.get("/api/health", (_req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/reviews", reviewRoutes);
+app.use("/api/contact", contactRoutes);
 app.use("/api/tasks", taskRoutes);
 
 app.use((_req, res) => {
