@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 import Button from '../../components/ui/Button'
 import DeleteConfirm from '../../components/ui/DeleteConfirm'
 import TaskModal from '../../components/ui/TaskModal'
-import { moveTask as moveTaskInOrder, reorderTasks, TASK_STATUSES } from '../../utils/taskOrder'
+import { moveTask as moveTaskInOrder, reorderTasks as reorderTasksInOrder, TASK_STATUSES } from '../../utils/taskOrder'
 
 function TaskCard({ task, onEdit, onDelete, onStatusChange, overlay = false }) {
   const sortable = useSortable({ id: task.id, data: { status: task.status }, disabled: overlay })
@@ -34,7 +34,7 @@ function getStatusFromOver(over) {
 }
 
 export default function Tasks() {
-  const { tasks, setTasks, addTask, updateTask, deleteTask, moveTask, setToast, canAddTask } = useApp()
+  const { tasks, loading, error, reloadTasks, addTask, updateTask, deleteTask, moveTask, reorderTasks, setToast, canAddTask } = useApp()
   const [query, setQuery] = useState('')
   const [priority, setPriority] = useState('All')
   const [project, setProject] = useState('All')
@@ -65,23 +65,28 @@ export default function Tasks() {
     setModalTask(null)
     setShowModal(true)
   }
-  const saveTask = (form) => {
+  const saveTask = async (form) => {
     if (!modalTask && !canAddTask(activeTaskCount)) {
       setLimitMessage('Free plan limit reached. Complete or delete an active task, or upgrade to add more.')
-      return
+      return false
     }
     if (modalTask && modalTask.status === 'Done' && form.status !== 'Done' && !canAddTask(activeTaskCount)) {
       setLimitMessage('Free plan limit reached. Complete or delete an active task, or upgrade to move this task back to active.')
-      return
+      return false
     }
-    if (modalTask) updateTask(modalTask.id, form)
-    else addTask(form)
+    if (modalTask) await updateTask(modalTask.id, form)
+    else await addTask(form)
     setShowModal(false)
     setModalTask(null)
+    return true
   }
-  const confirmDelete = () => {
-    deleteTask(deleteTarget.id)
-    setDeleteTarget(null)
+  const confirmDelete = async () => {
+    try {
+      await deleteTask(deleteTarget.id)
+      setDeleteTarget(null)
+    } catch (deleteError) {
+      setToast(deleteError.message || 'Could not delete the task.')
+    }
   }
   const changeStatus = (task, status) => {
     if (task.status === 'Done' && status !== 'Done' && !canAddTask(activeTaskCount)) {
@@ -104,9 +109,10 @@ export default function Tasks() {
       return
     }
     setLimitMessage('')
-    const nextTasks = status === task.status ? reorderTasks(tasks, active.id, over.id) : moveTaskInOrder(tasks, active.id, status, typeof over.id === 'number' ? over.id : null)
+    const overId = typeof over.id === 'string' && over.id.startsWith('column:') ? null : over.id
+    const nextTasks = status === task.status ? reorderTasksInOrder(tasks, active.id, over.id) : moveTaskInOrder(tasks, active.id, status, overId)
     if (nextTasks !== tasks) {
-      setTasks(nextTasks)
+      reorderTasks(nextTasks)
       setToast('Task moved')
     }
   }
@@ -115,8 +121,10 @@ export default function Tasks() {
     <div className="page-toolbar"><div className="task-filters"><div className="search"><Search size={17}/><input placeholder="Search tasks..." value={query} onChange={(event) => setQuery(event.target.value)} aria-label="Search tasks"/></div><select value={priority} onChange={(event) => setPriority(event.target.value)} aria-label="Filter by priority"><option>All</option><option>High</option><option>Medium</option><option>Low</option></select><select value={project} onChange={(event) => setProject(event.target.value)} aria-label="Filter by project"><option>All</option>{projects.map((item) => <option key={item}>{item}</option>)}</select></div><Button onClick={openCreate}><Plus size={17}/> New task</Button></div>
     {limitMessage && <p className="plan-limit-message" role="alert">{limitMessage} <Link to="/dashboard/billing">Upgrade</Link></p>}
     {isFiltered && <p className="filter-hint" role="status">Filtering is active. Drag-and-drop reordering is disabled until filters are cleared.</p>}
-    {!filtered.length && <div className="empty-state" role="status">{tasks.length ? 'No tasks match your search or filters.' : 'No tasks yet. Create your first task to get started.'}<button className="text-link" onClick={openCreate}>Create a task</button></div>}
-    <div className="kanban">{TASK_STATUSES.map((status) => <KanbanColumn key={status} status={status} tasks={filtered.filter((task) => task.status === status).sort((a, b) => a.order - b.order)} onEdit={(task) => { setModalTask(task); setShowModal(true) }} onDelete={setDeleteTarget} onStatusChange={changeStatus} onAdd={openCreate}/>)}</div>
+    {loading && <div className="tasks-loading" aria-busy="true" aria-label="Loading tasks"><div className="task-skeleton"/><div className="task-skeleton"/><div className="task-skeleton"/></div>}
+    {!loading && error && <div className="empty-state task-error" role="alert"><span>Could not load your tasks. {error.message}</span><Button variant="ghost" onClick={reloadTasks}>Retry</Button></div>}
+    {!loading && !error && !filtered.length && <div className="empty-state" role="status">{tasks.length ? 'No tasks match your search or filters.' : 'No tasks yet. Create your first task to get started.'}<button className="text-link" onClick={openCreate}>Create a task</button></div>}
+    {!loading && !error && <div className="kanban">{TASK_STATUSES.map((status) => <KanbanColumn key={status} status={status} tasks={filtered.filter((task) => task.status === status).sort((a, b) => a.order - b.order)} onEdit={(task) => { setModalTask(task); setShowModal(true) }} onDelete={setDeleteTarget} onStatusChange={changeStatus} onAdd={openCreate}/>)}</div>}
     <DragOverlay>{activeTask ? <TaskCard task={activeTask} overlay onEdit={() => {}} onDelete={() => {}} onStatusChange={() => {}}/> : null}</DragOverlay>
     {showModal && <TaskModal task={modalTask} close={() => { setShowModal(false); setModalTask(null) }} save={saveTask}/>}
     {deleteTarget && <DeleteConfirm task={deleteTarget} close={() => setDeleteTarget(null)} confirm={confirmDelete}/>}

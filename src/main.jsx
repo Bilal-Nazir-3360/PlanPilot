@@ -12,13 +12,13 @@ createRoot(document.getElementById('root')).render(
   <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
     <AuthProvider>
       <PlanProvider>
-        <TaskProvider>
-          <ThemeProvider>
-            <ToastProvider>
+        <ThemeProvider>
+          <ToastProvider>
+            <TaskProvider>
               <App />
-            </ToastProvider>
-          </ThemeProvider>
-        </TaskProvider>
+            </TaskProvider>
+          </ToastProvider>
+        </ThemeProvider>
       </PlanProvider>
     </AuthProvider>
   </BrowserRouter>,

@@ -28,12 +28,13 @@ function isValidDate(value) {
 export default function TaskModal({ close, save, task }) {
   const [form, setForm] = useState(() => getInitialForm(task))
   const [errors, setErrors] = useState({})
+  const [saving, setSaving] = useState(false)
   const editing = Boolean(task)
   const update = (field, value) => {
     setForm((current) => ({ ...current, [field]: value }))
     setErrors((current) => ({ ...current, [field]: '' }))
   }
-  const submit = (event) => {
+  const submit = async (event) => {
     event.preventDefault()
     const nextErrors = {}
     const title = form.title.trim()
@@ -45,18 +46,26 @@ export default function TaskModal({ close, save, task }) {
       setErrors(nextErrors)
       return
     }
-    save({ ...form, title, description: form.description.trim(), tag: form.tag.trim() || 'General' })
+    setSaving(true)
+    try {
+      await save({ ...form, title, description: form.description.trim(), tag: form.tag.trim() || 'General' })
+    } catch (error) {
+      setErrors({ ...(error.errors || {}), form: error.message || 'Could not save this task.' })
+    } finally {
+      setSaving(false)
+    }
   }
 
   return <Modal onClose={close} labelledBy="task-modal-title">
     <form className="task-form" onSubmit={submit}>
       <div className="card-head"><h3 id="task-modal-title">{editing ? 'Edit task' : 'New task'}</h3><button type="button" className="icon-btn" onClick={close} aria-label="Close task form"><X size={18}/></button></div>
+      {errors.form && <small className="form-error" role="alert">{errors.form}</small>}
       <label>Task name<input autoFocus value={form.title} onChange={(event) => update('title', event.target.value)} placeholder="What needs doing?" aria-invalid={Boolean(errors.title)} aria-describedby={errors.title ? 'task-title-error' : undefined}/>{errors.title && <small className="form-error" id="task-title-error">{errors.title}</small>}</label>
       <label>Description<textarea rows="3" value={form.description} onChange={(event) => update('description', event.target.value)} placeholder="Add useful context..." aria-invalid={Boolean(errors.description)} aria-describedby={errors.description ? 'task-description-error' : undefined}/>{errors.description && <small className="form-error" id="task-description-error">{errors.description}</small>}</label>
-      <div className="form-row"><label>Status<select value={form.status} onChange={(event) => update('status', event.target.value)}>{TASK_STATUSES.map((status) => <option key={status}>{status}</option>)}</select></label><label>Priority<select value={form.priority} onChange={(event) => update('priority', event.target.value)}>{priorities.map((priority) => <option key={priority}>{priority}</option>)}</select></label></div>
-      <div className="form-row"><label>Project<select value={form.project} onChange={(event) => update('project', event.target.value)}>{projects.map((project) => <option key={project}>{project}</option>)}</select></label><label>Due date<input type="date" value={form.due} onChange={(event) => update('due', event.target.value)} aria-invalid={Boolean(errors.due)} aria-describedby={errors.due ? 'task-due-error' : undefined}/>{errors.due && <small className="form-error" id="task-due-error">{errors.due}</small>}</label></div>
-      <label>Tag<input value={form.tag} onChange={(event) => update('tag', event.target.value)} placeholder="General"/></label>
-      <div className="modal-actions"><Button type="button" variant="ghost" onClick={close}>Cancel</Button><Button type="submit">{editing ? 'Save changes' : 'Create task'}</Button></div>
+      <div className="form-row"><label>Status<select value={form.status} onChange={(event) => update('status', event.target.value)}>{TASK_STATUSES.map((status) => <option key={status}>{status}</option>)}</select>{errors.status && <small className="form-error">{errors.status}</small>}</label><label>Priority<select value={form.priority} onChange={(event) => update('priority', event.target.value)}>{priorities.map((priority) => <option key={priority}>{priority}</option>)}</select>{errors.priority && <small className="form-error">{errors.priority}</small>}</label></div>
+      <div className="form-row"><label>Project<select value={form.project} onChange={(event) => update('project', event.target.value)}>{projects.map((project) => <option key={project}>{project}</option>)}</select>{errors.project && <small className="form-error">{errors.project}</small>}</label><label>Due date<input type="date" value={form.due} onChange={(event) => update('due', event.target.value)} aria-invalid={Boolean(errors.due)} aria-describedby={errors.due ? 'task-due-error' : undefined}/>{errors.due && <small className="form-error" id="task-due-error">{errors.due}</small>}</label></div>
+      <label>Tag<input value={form.tag} onChange={(event) => update('tag', event.target.value)} placeholder="General"/>{errors.tag && <small className="form-error">{errors.tag}</small>}</label>
+      <div className="modal-actions"><Button type="button" variant="ghost" onClick={close} disabled={saving}>Cancel</Button><Button type="submit" disabled={saving}>{saving ? 'Saving...' : editing ? 'Save changes' : 'Create task'}</Button></div>
     </form>
   </Modal>
 }

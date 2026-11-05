@@ -24,16 +24,16 @@ export function useApp() {
       clearMessages()
       toast.setToast('Workspace data cleared')
     },
-    addTask: (task) => {
-      taskState.addTask(task)
+    addTask: async (task) => {
+      await taskState.addTask(task)
       toast.setToast('Task added to your workspace')
     },
-    updateTask: (id, patch) => {
-      taskState.updateTask(id, patch)
+    updateTask: async (id, patch) => {
+      await taskState.updateTask(id, patch)
       toast.setToast('Task updated')
     },
-    deleteTask: (id) => {
-      taskState.deleteTask(id)
+    deleteTask: async (id) => {
+      await taskState.deleteTask(id)
       toast.setToast('Task deleted')
     },
     moveTask: (id, status, order) => {
