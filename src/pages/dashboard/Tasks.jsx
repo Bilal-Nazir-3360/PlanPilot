@@ -88,17 +88,22 @@ export default function Tasks() {
       setToast(deleteError.message || 'Could not delete the task.')
     }
   }
-  const changeStatus = (task, status) => {
+  const changeStatus = async (task, status) => {
     if (task.status === 'Done' && status !== 'Done' && !canAddTask(activeTaskCount)) {
       setLimitMessage('Free plan limit reached. Complete or delete an active task, or upgrade to move this task back to active.')
       return
     }
     setLimitMessage('')
-    moveTask(task.id, status, tasks.filter((item) => item.status === status).length)
+    const nextOrder = tasks.filter((item) => item.status === status).length
+    try {
+      await updateTask(task.id, { status, order: nextOrder })
+    } catch (statusError) {
+      setToast(statusError.message || 'Could not save the task status.')
+    }
   }
   const handleDragStart = ({ active }) => setActiveId(active.id)
   const handleDragCancel = () => setActiveId(null)
-  const handleDragEnd = ({ active, over }) => {
+  const handleDragEnd = async ({ active, over }) => {
     setActiveId(null)
     if (isFiltered || !over || active.id === over.id) return
     const task = tasks.find((item) => item.id === active.id)
@@ -112,8 +117,12 @@ export default function Tasks() {
     const overId = typeof over.id === 'string' && over.id.startsWith('column:') ? null : over.id
     const nextTasks = status === task.status ? reorderTasksInOrder(tasks, active.id, over.id) : moveTaskInOrder(tasks, active.id, status, overId)
     if (nextTasks !== tasks) {
-      reorderTasks(nextTasks)
-      setToast('Task moved')
+      try {
+        await reorderTasks(nextTasks)
+        setToast('Task moved')
+      } catch (statusError) {
+        setToast(statusError.message || 'Could not save the task status.')
+      }
     }
   }
 

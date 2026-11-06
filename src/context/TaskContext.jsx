@@ -76,7 +76,18 @@ export function TaskProvider({ children }) {
     if (!changed.length) return
     setTasks(nextTasks)
     try {
-      await reorderTasksInService(changed.map(({ id, status, order }) => ({ id, status, order })))
+      const statusChanges = changed.filter((task) => {
+        const previous = previousTasks.find((item) => item.id === task.id)
+        return previous?.status !== task.status
+      })
+      const orderChanges = changed.filter((task) => !statusChanges.some((statusTask) => statusTask.id === task.id))
+      const updatedTasks = await Promise.all(statusChanges.map(({ id, status, order }) => updateTaskInService(id, { status, order })))
+      if (orderChanges.length) {
+        await reorderTasksInService(orderChanges.map(({ id, status, order }) => ({ id, status, order })))
+      }
+      if (updatedTasks.length) {
+        setTasks((current) => current.map((task) => updatedTasks.find((updated) => updated.id === task.id) || task))
+      }
     } catch (reorderError) {
       setTasks(previousTasks)
       setToast(reorderError.message || 'Could not save the task order.')

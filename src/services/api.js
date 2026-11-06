@@ -37,6 +37,9 @@ export async function api(path, options = {}) {
   }
 
   if (!response.ok) {
+    if (import.meta.env.DEV && path.startsWith('/api/tasks')) {
+      console.warn(`[task API] ${requestOptions.method || 'GET'} ${path} failed with status ${response.status}`)
+    }
     throw new ApiError(
       response.status,
       data?.message || 'Something went wrong. Please try again.',

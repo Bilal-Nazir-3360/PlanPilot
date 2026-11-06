@@ -427,3 +427,27 @@ body{font-family:var(--font-body)}
 .dashboard-error{max-width:560px;margin:80px auto;text-align:center}.dashboard-error h2{margin:0 0 8px}.dashboard-error p{color:#a6abb9}.dashboard-error-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}.overview-empty{justify-content:space-between;text-align:left}.overview-empty h3,.overview-empty p{margin:0}.overview-empty p{color:#a6abb9;margin-top:5px}.team-form-fields{display:grid;gap:18px}.team-form label{display:grid;gap:8px;color:#aeb3c0;font-size:.82rem}.team-form input{min-height:46px}.team-list{display:grid;gap:10px}.team-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid #272c36}.team-row:last-child{border-bottom:0}.team-member-details{display:grid;gap:3px;min-width:0}.team-member-details b,.team-member-details small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.team-member-details small{color:#7f8698;font-size:.74rem}.team-actions{display:flex;gap:6px;align-items:center}.team-actions .btn{min-height:44px}.team-actions .btn.danger{font-size:.78rem}
 @media(min-width:701px){.team-form-fields{grid-template-columns:repeat(2,minmax(0,1fr))}.team-form-fields label:first-child{grid-column:span 2}}
 @media(max-width:600px){.overview-empty{align-items:flex-start}.team-row{grid-template-columns:auto minmax(0,1fr)}.team-actions{grid-column:2}.team-actions .btn{flex:1;justify-content:center}}
+
+html{scrollbar-gutter:stable}
+@font-face{font-family:'Hanken Fallback';src:local('Arial');size-adjust:100%;ascent-override:90%;descent-override:22%;line-gap-override:0%}
+@font-face{font-family:'Instrument Fallback';src:local('Georgia');size-adjust:98%;ascent-override:90%;descent-override:22%;line-gap-override:0%}
+body{font-family:'Hanken Grotesk','Hanken Fallback',Arial,sans-serif}
+.brand,.hero h1,.simple-page h1,.footer-brand .brand,.mobile-nav-link,.home-page h1,.home-page h2,.home-page h3{font-family:'Instrument Serif','Instrument Fallback',Georgia,serif}
+.modal-back{position:fixed;inset:0;z-index:100;overflow-y:auto;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{max-height:90vh;overflow-y:auto;min-width:0}
+.animated-modal-back .modal{max-height:90vh;overflow-y:auto}
+.nav-auth-placeholder{display:block;width:244px;height:44px}
+.signed-in-nav{display:flex;align-items:center;gap:10px}
+.app-shell,.dashboard-main,.card,.team-list,.team-row,.project-grid,.kanban{min-width:0}
+.dashboard-main{min-height:100vh}
+.kanban{max-width:100%;min-width:0}
+.team-member-details{min-width:0}
+input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #e2b659;outline-offset:2px;box-shadow:none}
+@media(max-width:800px){
+  .app-shell aside{width:72px;padding:20px 8px}
+  .app-shell aside .brand{justify-content:center;font-size:0}
+  .app-shell aside .workspace-select{margin-left:0;margin-right:0;justify-content:center;font-size:0}
+  .app-shell aside .side-bottom>a,.app-shell aside .theme-toggle{justify-content:center;font-size:0;padding-left:4px;padding-right:4px}
+  .dashboard-main{padding-left:16px;padding-right:16px}
+}
+@media(max-width:767px){.nav-auth-placeholder{width:44px}.public-nav{height:76px}}
