@@ -1,6 +1,8 @@
 import { lazy, Suspense } from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, useLocation } from 'react-router-dom'
 import AmbientBackground from './components/AmbientBackground'
+import Navbar from './components/layout/Navbar'
+import Footer from './components/layout/Footer'
 import Home from './pages/public/Home'
 import ProtectedRoute from './routes/ProtectedRoute'
 import DashboardErrorBoundary from './components/ui/DashboardErrorBoundary'
@@ -36,10 +38,14 @@ function ToastNotice() {
 }
 
 export default function App() {
+  const { pathname } = useLocation()
+  const publicRoute = !pathname.startsWith('/dashboard')
+
   return (
     <>
       <AmbientBackground />
       <ToastNotice />
+      {publicRoute && <Navbar />}
       <Suspense fallback={<RouteFallback />}>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -63,6 +69,7 @@ export default function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
+      {publicRoute && <Footer />}
     </>
   )
 }

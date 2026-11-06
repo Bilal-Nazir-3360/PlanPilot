@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState } from 'react'
-import Navbar from '../../components/layout/Navbar'
-import Footer from '../../components/layout/Footer'
 import useDocumentTitle from '../../hooks/useDocumentTitle'
 import { useApp } from '../../context/AppContext'
 import ReviewsHero from './reviews/ReviewsHero'
@@ -35,11 +33,11 @@ export default function Reviews() {
     scrollToForm()
   }
 
-  return <><Navbar/><main id="main" className="reviews-page">
+  return <main id="main" className="reviews-page">
     <ReviewsHero onWrite={scrollToForm} />
     <RatingSummary reviews={reviews} onRating={setRating} />
     <ReviewControls sortMode={sortMode} setSortMode={setSortMode} rating={rating} setRating={setRating} search={search} setSearch={setSearch} clearFilters={clearFilters} total={reviews.length} shown={filtered.length} />
     <ReviewList reviews={filtered} user={user} highlighted={highlighted} onEdit={setEditing} onClearFilters={clearFilters} loading={reviewsLoading} error={reviewsError} onRetry={reloadReviews} />
     <div ref={formRef}>{editing ? <Modal open onClose={() => setEditing(null)} labelledBy="edit-review-title"><ReviewForm user={user} editing={editing} onClose={() => setEditing(null)} onSuccess={afterSubmit} /></Modal> : <ReviewForm user={user} onClose={() => setEditing(null)} onSuccess={afterSubmit} />}</div>
-  </main><Footer/></>
+  </main>
 }

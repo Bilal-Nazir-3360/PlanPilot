@@ -1,13 +1,27 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 /**
  * A restrained aurora mesh that stays behind the interface.
  * The canvas reads PlanPilot's theme class so the in-app toggle updates it too.
  */
 export function AmbientBackground() {
+  const [mounted, setMounted] = useState(false)
   const canvasRef = useRef(null)
 
   useEffect(() => {
+    let idleId
+    let timeoutId
+    const mount = () => setMounted(true)
+    if ('requestIdleCallback' in window) idleId = window.requestIdleCallback(mount)
+    else timeoutId = window.setTimeout(mount, 0)
+    return () => {
+      if (idleId) window.cancelIdleCallback(idleId)
+      if (timeoutId) window.clearTimeout(timeoutId)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!mounted) return undefined
     const canvas = canvasRef.current
     const context = canvas?.getContext('2d')
     if (!canvas || !context) return undefined
@@ -132,8 +146,9 @@ export function AmbientBackground() {
       reducedMotion.removeEventListener('change', restart)
       themeObserver?.disconnect()
     }
-  }, [])
+  }, [mounted])
 
+  if (!mounted) return null
   return (
     <canvas
       ref={canvasRef}

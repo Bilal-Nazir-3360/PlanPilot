@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react'
-import Footer from '../../../components/layout/Footer'
-import Navbar from '../../../components/layout/Navbar'
 import useDocumentTitle from '../../../hooks/useDocumentTitle'
 
 export default function LegalPage({ title, description, sections, lastUpdated, children }) {
@@ -18,5 +16,5 @@ export default function LegalPage({ title, description, sections, lastUpdated, c
     return () => observer.disconnect()
   }, [sections])
 
-  return <><Navbar /><main id="main" className="legal-page"><header className="legal-header"><div className="eyebrow">PLAIN-ENGLISH POLICY</div><h1>{title}</h1>{lastUpdated && <p className="legal-updated">Last updated: <time dateTime={lastUpdated}>{lastUpdated}</time></p>}</header><div className="legal-layout"><aside className="legal-toc" aria-label={`${title} sections`}><strong>On this page</strong><nav>{sections.map(({ id, label }) => <a className={activeId === id ? 'active' : ''} href={`#${id}`} key={id}>{label}</a>)}</nav></aside><article className="legal-content">{children}</article></div></main><Footer /></>
+  return <main id="main" className="legal-page"><header className="legal-header"><div className="eyebrow">PLAIN-ENGLISH POLICY</div><h1>{title}</h1>{lastUpdated && <p className="legal-updated">Last updated: <time dateTime={lastUpdated}>{lastUpdated}</time></p>}</header><div className="legal-layout"><aside className="legal-toc" aria-label={`${title} sections`}><strong>On this page</strong><nav>{sections.map(({ id, label }) => <a className={activeId === id ? 'active' : ''} href={`#${id}`} key={id}>{label}</a>)}</nav></aside><article className="legal-content">{children}</article></div></main>
 }

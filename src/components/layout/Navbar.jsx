@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowRight, ChevronDown, Menu, X } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { useApp } from '../../context/AppContext'
 import { navLinks, siteName } from '../../data/site'
@@ -14,7 +14,7 @@ export default function Navbar() {
   const navigate = useNavigate()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [accountOpen, setAccountOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
+  const [scrolled, setScrolled] = useState(() => typeof window !== 'undefined' && window.scrollY > 12)
   const mobileMenuRef = useRef(null)
   const mobileButtonRef = useRef(null)
   const accountMenuRef = useRef(null)
@@ -23,7 +23,7 @@ export default function Navbar() {
   const firstName = user?.name?.trim().split(/\s+/)[0] || 'Account'
   const initial = firstName[0]?.toUpperCase() || 'A'
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
@@ -105,14 +105,16 @@ export default function Navbar() {
 
   return <><a className="skip-link" href="#main">Skip to content</a><header className={`public-header ${scrolled ? 'is-scrolled' : ''}`}>
     <nav className="public-nav" aria-label="Primary navigation">
+      <div className="public-nav-inner">
       <Link to="/" className="brand" onClick={closeMenus}><DiamondMark /> {siteName}</Link>
       <div className="desktop-nav-links">
-        {navLinks.map(({ label, to }, index) => <NavLink key={to} to={to} className={({ isActive }) => `public-nav-link${isActive ? ' active' : ''}`}>{({ isActive }) => <><span className="nav-number">{String(index + 1).padStart(2, '0')}</span>{label}{isActive && <motion.span className="nav-active-indicator" layoutId="public-nav-indicator" />}</>}</NavLink>)}
+        {navLinks.map(({ label, to }, index) => <NavLink key={to} to={to} className={({ isActive }) => `public-nav-link${isActive ? ' active' : ''}`}>{({ isActive }) => <><span className="nav-number">{String(index + 1).padStart(2, '0')}</span>{label}{isActive && <motion.span className="nav-active-indicator" initial={false} layoutId="public-nav-indicator" />}</>}</NavLink>)}
       </div>
       <div className="nav-actions">
         <ThemeToggle />
         {loading ? <span className="nav-auth-placeholder" aria-hidden="true" /> : user ? <div className="signed-in-nav"><Link to="/dashboard" className="nav-cta-link"><Button>Open dashboard <ArrowRight size={15} /></Button></Link><div className="account-menu-wrap"><button ref={accountButtonRef} type="button" className="account-trigger" onClick={() => setAccountOpen((current) => !current)} aria-haspopup="menu" aria-expanded={accountOpen}><span className="avatar">{initial}</span><span>{firstName}</span><ChevronDown size={15} /></button>{accountOpen && <div ref={accountMenuRef} className="account-menu" role="menu" aria-label="Account menu"><div className="account-details"><b>{user.name}</b><small>{user.email}</small></div>{accountItems.map(({ label, to }) => <Link key={to} to={to} role="menuitem" tabIndex={0} onClick={closeMenus}>{label}</Link>)}<div className="account-divider" /><button type="button" role="menuitem" onClick={handleLogout}>Log out</button></div>}</div></div> : <><Link to="/login" className="nav-account-link">Log in</Link><Link to="/signup" className="nav-account-link nav-signup-link">Sign up</Link><button type="button" className="nav-cta-link nav-text-button" onClick={tryDemo}><Button type="button">Try demo <ArrowRight size={15} /></Button></button></>}
         <button ref={mobileButtonRef} type="button" className="icon-btn mobile-menu" onClick={() => setMobileOpen((current) => !current)} aria-label={mobileOpen ? 'Close navigation' : 'Open navigation'} aria-expanded={mobileOpen} aria-controls="mobile-navigation">{mobileOpen ? <X /> : <Menu />}</button>
+      </div>
       </div>
     </nav>
     <AnimatePresence>

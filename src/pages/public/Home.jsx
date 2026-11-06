@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react'
-import Footer from '../../components/layout/Footer'
-import Navbar from '../../components/layout/Navbar'
 import useDocumentTitle from '../../hooks/useDocumentTitle'
 import FinalCta from './home/FinalCta'
 import FeatureHighlights from './home/FeatureHighlights'
@@ -65,5 +63,5 @@ function SectionRail() {
 
 export default function Home() {
   useDocumentTitle('PlanPilot — Plan boldly. Ship clearly.', 'Try the live PlanPilot workspace demo: organize tasks, projects, and progress in a focused browser-based prototype.')
-  return <><Navbar /><main id="main" className="home-page"><SectionRail /><HomeHero /><LazySection><HowItWorks /></LazySection><LazySection><FeatureHighlights /></LazySection><LazySection><TechStrip /></LazySection><LazySection><FinalCta /></LazySection></main><Footer /></>
+  return <main id="main" className="home-page"><SectionRail /><HomeHero /><LazySection><HowItWorks /></LazySection><LazySection><FeatureHighlights /></LazySection><LazySection><TechStrip /></LazySection><LazySection><FinalCta /></LazySection></main>
 }
