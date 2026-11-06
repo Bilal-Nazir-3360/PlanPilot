@@ -14,7 +14,8 @@ function ModalVisual({ feature }) {
 export default function FeatureModal({ feature, close }) {
   if (!feature) return null
   return <Modal onClose={close} layoutId={`feature-${feature.id}`} labelledBy={`feature-modal-${feature.id}`} className="feature-modal">
-    <div className="card-head"><div><StatusBadge status={feature.status}/><h2 id={`feature-modal-${feature.id}`}>{feature.title}</h2></div><button type="button" className="icon-btn" onClick={close} aria-label="Close feature details"><X size={18}/></button></div>
-    <div className="feature-modal-content"><p>{feature.description}</p><ModalVisual feature={feature}/><ul className="feature-capabilities">{feature.capabilities.map((capability) => <li key={capability}><Check size={15}/>{capability}</li>)}</ul>{feature.status === 'Live' && <Link to="/login" onClick={close}><Button>Try it in the demo</Button></Link>}</div>
+    <div className="modal-header card-head"><div><StatusBadge status={feature.status}/><h2 id={`feature-modal-${feature.id}`}>{feature.title}</h2></div><button type="button" className="icon-btn" onClick={close} aria-label="Close feature details"><X size={18}/></button></div>
+    <div className="modal-body feature-modal-content"><p>{feature.description}</p><ModalVisual feature={feature}/><ul className="feature-capabilities">{feature.capabilities.map((capability) => <li key={capability}><Check size={15}/>{capability}</li>)}</ul></div>
+    {feature.status === 'Live' && <div className="modal-footer modal-actions"><Link to="/login" onClick={close}><Button>Try it in the demo</Button></Link></div>}
   </Modal>
 }

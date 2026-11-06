@@ -18,8 +18,9 @@ export default function Modal({ open = true, onClose, children, title, labelledB
   useEffect(() => {
     if (!open) return undefined
     const previous = document.activeElement
-    const previousOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
+    const root = document.documentElement
+    const previousOverflow = root.style.overflow
+    root.style.overflow = 'hidden'
     const focusDialog = () => {
       const firstFocusable = dialogRef.current?.querySelector(focusableSelector)
       if (firstFocusable) firstFocusable.focus()
@@ -45,7 +46,7 @@ export default function Modal({ open = true, onClose, children, title, labelledB
     return () => {
       window.clearTimeout(timer)
       document.removeEventListener('keydown', onKeyDown)
-      document.body.style.overflow = previousOverflow
+      root.style.overflow = previousOverflow
       previous?.focus?.()
     }
   }, [onClose, open])

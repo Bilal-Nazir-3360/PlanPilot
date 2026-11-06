@@ -916,3 +916,154 @@ td { border-color: var(--line); }
   .site-footer { grid-template-columns: 1fr; }
   .footer-groups { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* Shared modal and form layout */
+:root {
+  color-scheme: dark;
+  scrollbar-gutter: stable;
+}
+:root.light, :root[data-theme="light"] {
+  color-scheme: light;
+}
+html, body {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) transparent;
+}
+*, *::before, *::after {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 999px;
+}
+
+.modal-back {
+  overflow: hidden;
+}
+.modal {
+  display: flex;
+  flex-direction: column;
+  width: min(100%, 720px);
+  max-height: min(90vh, 720px);
+  min-height: 0;
+  overflow: hidden;
+}
+.modal > form {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.modal-header,
+.modal-footer {
+  flex: 0 0 auto;
+  padding: 20px;
+}
+.modal-header {
+  margin: 0;
+  border-bottom: 1px solid var(--line);
+}
+.modal-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 20px;
+}
+.modal-footer {
+  border-top: 1px solid var(--line);
+}
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+}
+.modal-actions > * {
+  flex: 0 0 auto;
+}
+
+.task-form .modal-body {
+  display: grid;
+  gap: 16px;
+}
+.task-form label,
+.team-form label,
+.auth-card label,
+.review-form label,
+.contact-form label {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.team-form-fields {
+  gap: 16px;
+}
+input, select, textarea {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+}
+input, select {
+  min-height: 44px;
+}
+.form-error {
+  display: block;
+}
+.review-form,
+.contact-form,
+.auth-card form {
+  gap: 16px;
+}
+.review-form .btn,
+.contact-form .btn {
+  justify-self: end;
+}
+input[type="date"] {
+  accent-color: var(--accent);
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(79%) sepia(43%) saturate(640%) hue-rotate(359deg);
+}
+.light input[type="date"]::-webkit-calendar-picker-indicator,
+[data-theme="light"] input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: none;
+}
+
+@media (max-width: 640px) {
+  .modal-back {
+    align-items: flex-end;
+    padding: 0;
+  }
+  .modal {
+    width: 100%;
+    max-height: 90vh;
+    border-radius: var(--radius-card) var(--radius-card) 0 0;
+  }
+}
+@media (max-width: 480px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  .modal-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+  .modal-actions > * {
+    width: 100%;
+    justify-content: center;
+  }
+}
