@@ -49,6 +49,106 @@ textarea:focus-visible,input:focus-visible,select:focus-visible,button:focus-vis
   .hero h1{font-size:clamp(3rem,14vw,5rem)}
   footer{align-items:flex-start}
 }
+
+.user-chip {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+  border: 0;
+  border-top: 1px solid var(--line);
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+.user-chip-details {
+  display: grid;
+  min-width: 0;
+  gap: 4px;
+  flex: 1;
+}
+.user-chip-details b {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dashboard-user-menu {
+  position: absolute;
+  right: 16px;
+  bottom: 76px;
+  z-index: 40;
+  display: grid;
+  min-width: 190px;
+  padding: 8px;
+  gap: 2px;
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-control);
+  box-shadow: var(--shadow-soft);
+}
+.dashboard-user-menu a,
+.dashboard-user-menu button {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  font: inherit;
+}
+.dashboard-user-menu a:hover,
+.dashboard-user-menu button:hover {
+  background: var(--surface-3);
+  color: var(--accent-text);
+}
+.dashboard-user-menu .account-divider {
+  height: 1px;
+  margin: 6px 0;
+  background: var(--line);
+}
+@media (max-width: 1024px) {
+  .app-shell aside {
+    width: 64px;
+  }
+  .dashboard-user-menu {
+    left: 64px;
+    right: auto;
+    bottom: 16px;
+  }
+  .user-chip {
+    justify-content: center;
+    padding-inline: 0;
+  }
+  .user-chip-details,
+  .user-chip > svg {
+    display: none;
+  }
+}
+@media (max-width: 640px) {
+  .app-shell aside {
+    width: min(248px, 86vw);
+  }
+  .app-shell aside .user-chip {
+    justify-content: flex-start;
+    padding-inline: 4px;
+  }
+  .app-shell aside .user-chip-details,
+  .app-shell aside .user-chip > svg {
+    display: grid;
+  }
+  .app-shell aside .user-chip > svg {
+    display: block;
+  }
+  .dashboard-user-menu {
+    left: 4px;
+    right: 4px;
+    bottom: 76px;
+  }
+}
 @media(max-width:560px){
   :root{--public-nav-height:68px}
   .public-nav{height:68px}
@@ -439,6 +539,8 @@ body{font-family:'Hanken Grotesk','Hanken Fallback',Arial,sans-serif}
 .modal{max-height:90vh;overflow-y:auto;min-width:0}
 .animated-modal-back .modal{max-height:90vh;overflow-y:auto}
 .nav-auth-placeholder{display:block;width:244px;height:44px}
+.nav-auth-slot{width:244px;display:flex;justify-content:flex-end;align-items:center}
+.nav-auth-slot > .signed-in-nav{width:100%;justify-content:flex-end}
 .signed-in-nav{display:flex;align-items:center;gap:10px}
 .app-shell,.dashboard-main,.card,.team-list,.team-row,.project-grid,.kanban{min-width:0}
 .dashboard-main{min-height:100vh}
@@ -1050,6 +1152,96 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     width: 100%;
     max-height: 90vh;
     border-radius: var(--radius-card) var(--radius-card) 0 0;
+  }
+}
+
+/* Account controls */
+.user-chip {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+  border: 0;
+  border-top: 1px solid var(--line);
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+.user-chip-details {
+  display: grid;
+  min-width: 0;
+  gap: 4px;
+  flex: 1;
+}
+.user-chip-details b {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dashboard-user-menu {
+  position: absolute;
+  right: 16px;
+  bottom: 76px;
+  z-index: 40;
+  display: grid;
+  min-width: 190px;
+  padding: 8px;
+  gap: 2px;
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-control);
+  box-shadow: var(--shadow-soft);
+}
+.dashboard-user-menu a,
+.dashboard-user-menu button {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  font: inherit;
+}
+.dashboard-user-menu a:hover,
+.dashboard-user-menu button:hover {
+  background: var(--surface-3);
+  color: var(--accent-text);
+}
+.dashboard-user-menu .account-divider {
+  height: 1px;
+  margin: 6px 0;
+  background: var(--line);
+}
+@media (max-width: 1024px) {
+  .app-shell aside { width: 64px; }
+  .dashboard-user-menu {
+    left: 64px;
+    right: auto;
+    bottom: 16px;
+  }
+  .user-chip {
+    justify-content: center;
+    padding-inline: 0;
+  }
+  .user-chip-details,
+  .user-chip > svg { display: none; }
+}
+@media (max-width: 640px) {
+  .app-shell aside { width: min(248px, 86vw); }
+  .app-shell aside .user-chip {
+    justify-content: flex-start;
+    padding-inline: 4px;
+  }
+  .app-shell aside .user-chip-details { display: grid; }
+  .app-shell aside .user-chip > svg { display: block; }
+  .dashboard-user-menu {
+    left: 4px;
+    right: 4px;
+    bottom: 76px;
   }
 }
 
