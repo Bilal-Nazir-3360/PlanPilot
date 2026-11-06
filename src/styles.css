@@ -822,16 +822,68 @@ input:hover, select:hover, textarea:hover { border-color: var(--accent); }
 
 html, body { background: var(--bg); color: var(--text); }
 #root { position: relative; z-index: 1; }
-.flow-background {
+.wave-background {
   position: fixed;
   inset: 0;
   z-index: 0;
-  width: 100%;
-  height: 100%;
+  overflow: hidden;
   pointer-events: none;
-  display: block;
-  -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 100vh, rgba(0,0,0,.45) 150vh, rgba(0,0,0,.45) 100%);
-  mask-image: linear-gradient(to bottom, #000 0, #000 100vh, rgba(0,0,0,.45) 150vh, rgba(0,0,0,.45) 100%);
+  contain: strict;
+  opacity: 0;
+  transition: opacity 400ms ease;
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%), linear-gradient(to bottom, #000 0, #000 100vh, rgba(0,0,0,.35) 150vh, rgba(0,0,0,.35) 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%), linear-gradient(to bottom, #000 0, #000 100vh, rgba(0,0,0,.35) 150vh, rgba(0,0,0,.35) 100%);
+}
+.wave-background:not(.is-paused) { opacity: 1; }
+.wave-background__layer {
+  position: absolute;
+  top: var(--wave-position);
+  left: 0;
+  width: 200%;
+  height: 100%;
+  overflow: visible;
+  transform: translate3d(0, 0, 0);
+  animation: wave-drift var(--wave-duration) linear infinite;
+  animation-delay: calc(var(--wave-duration) * -0.37);
+}
+.wave-background__layer path {
+  fill: none;
+  stroke: var(--line-strong);
+  opacity: var(--wave-line-opacity);
+  stroke-width: 1px;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+.wave-background__layer.is-accent path {
+  stroke: var(--accent);
+  opacity: var(--wave-accent-opacity);
+}
+.wave-background.is-dashboard .wave-background__layer path { opacity: calc(var(--wave-line-opacity) * .5); }
+.wave-background.is-dashboard .wave-background__layer.is-accent path { opacity: calc(var(--wave-accent-opacity) * .5); }
+.light .wave-background__layer.is-accent path,
+[data-theme="light"] .wave-background__layer.is-accent path { stroke: var(--accent-text); opacity: .35; }
+.wave-background.is-dashboard .wave-background__layer.is-accent path { opacity: calc(var(--wave-accent-opacity) * .5); }
+.wave-background__layer.is-drifting path { animation: wave-opacity 34s ease-in-out infinite alternate; }
+.wave-background__layer.is-reversed { animation-direction: reverse; }
+.wave-background.is-paused .wave-background__layer,
+.wave-background.is-paused .wave-background__layer path { animation-play-state: paused; }
+@keyframes wave-drift {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+@keyframes wave-opacity {
+  from { opacity: .7; }
+  to { opacity: 1; }
+}
+@media (max-width: 640px) {
+  .wave-background__layer:nth-child(n + 8) { display: none; }
+  .wave-background__layer path { transform: scaleY(.5); transform-origin: center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wave-background { transition: none; }
+  .wave-background__layer,
+  .wave-background__layer.is-reversed,
+  .wave-background__layer.is-drifting path { animation: none; }
 }
 body { font-family: var(--font-body); font-size: var(--type-body); line-height: 1.6; }
 body, p, li { max-width: 100%; }

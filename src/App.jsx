@@ -5,9 +5,8 @@ import Footer from './components/layout/Footer'
 import Home from './pages/public/Home'
 import ProtectedRoute from './routes/ProtectedRoute'
 import DashboardErrorBoundary from './components/ui/DashboardErrorBoundary'
-import FlowBackground from './components/FlowBackground'
+import WaveBackground from './components/WaveBackground'
 import { useToast } from './context/ToastContext'
-import { BACKGROUND_ANIMATION } from './data/site'
 
 const About = lazy(() => import('./pages/public/About'))
 const Contact = lazy(() => import('./pages/public/Contact'))
@@ -41,11 +40,10 @@ function ToastNotice() {
 export default function App() {
   const { pathname } = useLocation()
   const publicRoute = !pathname.startsWith('/dashboard')
-  const backgroundVariant = publicRoute ? 'full' : 'quiet'
 
   return (
     <>
-      {BACKGROUND_ANIMATION && <FlowBackground variant={backgroundVariant} />}
+      <WaveBackground />
       <ToastNotice />
       {publicRoute && <Navbar />}
       <Suspense fallback={<RouteFallback />}>
