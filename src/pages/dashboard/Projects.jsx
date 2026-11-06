@@ -7,7 +7,7 @@ import SpotlightCard from '../../components/ui/SpotlightCard'
 import Reveal from '../../components/ui/Reveal'
 import { useApp } from '../../context/AppContext'
 
-const colors = ['#e2b659', '#8b7cf6', '#4db6ac']
+const colors = ['var(--chart-series)', 'var(--chart-secondary)', 'var(--chart-tertiary)']
 
 function ProjectForm({ project, onSave, onClose }) {
   const [form, setForm] = useState({ name: project?.name || '', description: project?.description || '' })

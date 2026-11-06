@@ -3,7 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0b0d12" />
+    <meta name="theme-color" content="#0D0E11" />
+    <script>
+      (() => {
+        let saved = null
+        try { saved = JSON.parse(localStorage.getItem('pp_theme')) } catch {}
+        const theme = saved === 'light' || saved === 'dark'
+          ? saved
+          : (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark')
+        const root = document.documentElement
+        root.className = theme
+        root.dataset.theme = theme
+        root.style.colorScheme = theme
+        document.querySelector('meta[name="theme-color"]').setAttribute('content', theme === 'light' ? '#F7F4EE' : '#0D0E11')
+      })()
+    </script>
     <meta name="description" content="PlanPilot is a focused workspace for ambitious teams to plan, ship, and learn." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
