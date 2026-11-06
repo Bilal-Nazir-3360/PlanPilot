@@ -12,6 +12,7 @@ export function ThemeProvider({ children }) {
       setItem('pp_theme', theme)
     }
     document.documentElement.className = theme
+    document.documentElement.setAttribute('data-theme', theme)
   }, [theme])
   const clearTheme = () => {
     skipPersist.current = true

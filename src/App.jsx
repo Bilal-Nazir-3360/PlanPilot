@@ -1,6 +1,5 @@
 import { lazy, Suspense } from 'react'
 import { Route, Routes, useLocation } from 'react-router-dom'
-import AmbientBackground from './components/AmbientBackground'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
 import Home from './pages/public/Home'
@@ -43,7 +42,6 @@ export default function App() {
 
   return (
     <>
-      <AmbientBackground />
       <ToastNotice />
       {publicRoute && <Navbar />}
       <Suspense fallback={<RouteFallback />}>

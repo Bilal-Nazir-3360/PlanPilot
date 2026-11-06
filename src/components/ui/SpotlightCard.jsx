@@ -7,7 +7,7 @@ export default function SpotlightCard({ as = 'div', className = '', children, in
   const rotateX = useSpring(0, { stiffness: 220, damping: 24 })
   const rotateY = useSpring(0, { stiffness: 220, damping: 24 })
   const Component = as === 'div' ? motion.div : motion[as]
-  const canTrack = interactive && !reduceMotion && typeof window !== 'undefined' && !window.matchMedia('(pointer: coarse)').matches
+  const canTrack = interactive && className.includes('pricing-plan-highlight') && !reduceMotion && typeof window !== 'undefined' && !window.matchMedia('(pointer: coarse)').matches
 
   useEffect(() => {
     if (!canTrack || !ref.current) return undefined
