@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom'
 import AmbientBackground from './components/AmbientBackground'
 import Home from './pages/public/Home'
 import ProtectedRoute from './routes/ProtectedRoute'
+import DashboardErrorBoundary from './components/ui/DashboardErrorBoundary'
 
 const About = lazy(() => import('./pages/public/About'))
 const Contact = lazy(() => import('./pages/public/Contact'))
@@ -44,14 +45,14 @@ export default function App() {
           <Route path="/terms" element={<Terms />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="/dashboard/tasks" element={<ProtectedRoute><DashPage title="My tasks" sub="A focused list of everything on your plate."><Tasks /></DashPage></ProtectedRoute>} />
-          <Route path="/dashboard/projects" element={<ProtectedRoute><DashPage title="Projects" sub="Big goals, broken into clear next steps."><Projects /></DashPage></ProtectedRoute>} />
-          <Route path="/dashboard/calendar" element={<ProtectedRoute><DashPage title="Calendar" sub="See your work in time, not just in lists."><Calendar /></DashPage></ProtectedRoute>} />
-          <Route path="/dashboard/team" element={<ProtectedRoute><DashPage title="Team" sub="The people making progress happen."><Team /></DashPage></ProtectedRoute>} />
-          <Route path="/dashboard/analytics" element={<ProtectedRoute><DashPage title="Analytics" sub="Understand your momentum and improve it."><Analytics /></DashPage></ProtectedRoute>} />
-          <Route path="/dashboard/billing" element={<ProtectedRoute><DashPage title="Billing" sub="Explore your demo plan and workspace limits."><Billing /></DashPage></ProtectedRoute>} />
-          <Route path="/dashboard/settings" element={<ProtectedRoute><DashPage title="Settings" sub="Your workspace, your way."><Settings /></DashPage></ProtectedRoute>} />
+          <Route path="/dashboard" element={<ProtectedRoute><DashboardErrorBoundary><Dashboard /></DashboardErrorBoundary></ProtectedRoute>} />
+          <Route path="/dashboard/tasks" element={<ProtectedRoute><DashboardErrorBoundary><DashPage title="My tasks" sub="A focused list of everything on your plate."><Tasks /></DashPage></DashboardErrorBoundary></ProtectedRoute>} />
+          <Route path="/dashboard/projects" element={<ProtectedRoute><DashboardErrorBoundary><DashPage title="Projects" sub="Big goals, broken into clear next steps."><Projects /></DashPage></DashboardErrorBoundary></ProtectedRoute>} />
+          <Route path="/dashboard/calendar" element={<ProtectedRoute><DashboardErrorBoundary><DashPage title="Calendar" sub="See your work in time, not just in lists."><Calendar /></DashPage></DashboardErrorBoundary></ProtectedRoute>} />
+          <Route path="/dashboard/team" element={<ProtectedRoute><DashboardErrorBoundary><DashPage title="Team" sub="The people making progress happen."><Team /></DashPage></DashboardErrorBoundary></ProtectedRoute>} />
+          <Route path="/dashboard/analytics" element={<ProtectedRoute><DashboardErrorBoundary><DashPage title="Analytics" sub="Understand your momentum and improve it."><Analytics /></DashPage></DashboardErrorBoundary></ProtectedRoute>} />
+          <Route path="/dashboard/billing" element={<ProtectedRoute><DashboardErrorBoundary><DashPage title="Billing" sub="Explore your demo plan and workspace limits."><Billing /></DashPage></DashboardErrorBoundary></ProtectedRoute>} />
+          <Route path="/dashboard/settings" element={<ProtectedRoute><DashboardErrorBoundary><DashPage title="Settings" sub="Your workspace, your way."><Settings /></DashPage></DashboardErrorBoundary></ProtectedRoute>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>

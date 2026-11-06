@@ -7,7 +7,7 @@ import { useApp } from '../../context/AppContext'
 
 const priorities = ['High', 'Medium', 'Low']
 
-function getInitialForm(task) {
+function getInitialForm(task, projects) {
   return {
     title: task?.title || '',
     description: task?.description || '',
@@ -27,7 +27,7 @@ function isValidDate(value) {
 
 export default function TaskModal({ close, save, task }) {
   const { projects } = useApp()
-  const [form, setForm] = useState(() => getInitialForm(task))
+  const [form, setForm] = useState(() => getInitialForm(task, projects))
   const [errors, setErrors] = useState({})
   const [saving, setSaving] = useState(false)
   const editing = Boolean(task)

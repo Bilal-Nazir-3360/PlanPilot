@@ -28,7 +28,7 @@ export default function Projects() {
   const { projects, loading, error, reloadProjects, addProject, updateProject, deleteProject, setToast } = useApp()
   const [editing, setEditing] = useState(null)
   const [deleting, setDeleting] = useState(null)
-  const save = (project) => editing ? updateProject(editing.id, project) : addProject(project)
+  const save = (project) => editing?.id ? updateProject(String(editing.id), project) : addProject(project)
   const confirmDelete = async () => { try { await deleteProject(deleting.id); setDeleting(null) } catch (deleteError) { setToast(deleteError.message || 'Could not delete the project.') } }
   if (loading) return <div className="review-empty" role="status">Loading projects…</div>
   if (error) return <div className="review-empty" role="alert"><h3>Could not load projects.</h3><p>{error.message}</p><button className="btn ghost" onClick={reloadProjects}>Retry</button></div>
