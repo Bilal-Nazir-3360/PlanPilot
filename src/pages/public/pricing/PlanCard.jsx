@@ -2,7 +2,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { planById } from '../../../data/plans'
 import { useApp } from '../../../context/AppContext'
-import SpotlightCard from '../../../components/ui/SpotlightCard'
+import ElectricCard from '../../../components/ui/ElectricCard'
 
 const categories = ['Tasks', 'Planning', 'Analytics', 'Collaboration', 'Support']
 
@@ -17,9 +17,11 @@ export default function PlanCard({ planId }) {
   const price = selectedPlan.billingCycle === 'yearly' ? plan.yearlyMonthlyPrice : plan.monthlyPrice
   const paid = plan.id !== 'free'
   const destination = paid && user ? '/dashboard/billing' : plan.id === 'free' ? '/signup' : `/signup?plan=${plan.id}`
+  const Card = plan.highlight ? ElectricCard : 'div'
+  const cardClassName = `pricing-plan-card pricing-plan-${plan.id} ${plan.highlight ? 'pricing-plan-highlight' : ''}`
 
   return (
-    <SpotlightCard className={`pricing-plan-card pricing-plan-${plan.id} ${plan.highlight ? 'pricing-plan-highlight' : ''}`}>
+    <Card className={cardClassName} intensity="full">
       {plan.highlight && <span className="popular-badge">Most popular</span>}
       <div className="pricing-card-head">
         <div>
@@ -61,6 +63,6 @@ export default function PlanCard({ planId }) {
       <Link className={`btn pricing-card-cta ${plan.highlight ? '' : 'ghost'}`} to={destination}>
         {plan.id === 'free' ? 'Start free' : `Try ${plan.name} in the demo`}
       </Link>
-    </SpotlightCard>
+    </Card>
   )
 }

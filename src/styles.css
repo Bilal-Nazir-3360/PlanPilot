@@ -1622,3 +1622,99 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   }
   .public-dock.is-expanded .dock-logo svg { transform: none; }
 }
+
+.electric-card {
+  position: relative;
+  isolation: isolate;
+  border-radius: var(--electric-radius);
+  overflow: visible;
+  border: 0;
+  background: transparent;
+}
+.electric-card__effect {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.electric-card__effect rect {
+  fill: none;
+  stroke: var(--electric-color);
+  stroke-width: var(--electric-width);
+  vector-effect: non-scaling-stroke;
+}
+.electric-card__border {
+  z-index: 0;
+}
+.electric-card__glow {
+  z-index: -1;
+  opacity: var(--electric-glow-opacity);
+}
+.electric-card__surface {
+  position: relative;
+  z-index: 1;
+  min-height: 100%;
+  margin: var(--electric-width);
+  padding: inherit;
+  border-radius: calc(var(--electric-radius) - var(--electric-width));
+  background: var(--surface-1);
+}
+.electric-card > .btn,
+.electric-card a.btn,
+.electric-card button,
+.electric-card__surface > .btn,
+.electric-card__surface a.btn,
+.electric-card__surface button {
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+}
+.electric-card.is-static {
+  border: 1px solid var(--accent-text);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--accent) 10%, transparent);
+}
+.electric-card.is-static .electric-card__surface { margin: 0; border-radius: var(--electric-radius); }
+.electric-card-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0 9px;
+  border-radius: var(--radius-pill);
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  font: 500 .68rem var(--font-label);
+  text-transform: uppercase;
+}
+.electric-card.pricing-plan-card,
+.electric-card.final-home-card,
+.electric-card.billing-current-plan {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.electric-card.pricing-plan-card .electric-card__surface { padding: 24px; }
+.electric-card.final-home-card .electric-card__surface { padding: 38px; }
+.electric-card.billing-current-plan .electric-card__surface { padding: 25px; }
+.electric-card.final-home-card .final-home-card-content { display: contents; }
+.electric-card.final-home-card .electric-card-badge { margin-bottom: 12px; }
+.electric-card.final-home-card .final-home-actions .btn-frame {
+  position: relative;
+  z-index: 2;
+}
+.electric-card .btn:hover,
+.electric-card a.btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+.electric-card .btn:active,
+.electric-card a.btn:active { transform: scale(.98); }
+.electric-card .btn svg,
+.electric-card a.btn svg { transition: transform var(--duration-fast) ease; }
+.electric-card .btn:hover svg,
+.electric-card a.btn:hover svg { transform: translateX(3px); }
+.light .electric-card:not(.is-static) .electric-card__border rect { stroke: var(--accent-text); stroke-width: 1.5; }
+.light .electric-card:not(.is-static) .electric-card__glow { opacity: .1; }
+.light .electric-card__surface { background: var(--surface-1); }
+@media (max-width: 639px), (prefers-reduced-motion: reduce) {
+  .electric-card__effect { display: none; }
+  .electric-card.is-static .electric-card__surface { margin: 0; }
+}
