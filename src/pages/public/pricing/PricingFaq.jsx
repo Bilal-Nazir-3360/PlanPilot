@@ -1,6 +1,7 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
+import SplitSection from '../../../components/ui/SplitSection'
 
 const questions = [
   ['Is this real billing?', 'No, it is a portfolio demo. No payment is processed and no card details are requested.'],
@@ -14,9 +15,7 @@ export default function PricingFaq() {
   const reduceMotion = useReducedMotion()
 
   return (
-    <section className="pricing-section pricing-faq" aria-labelledby="faq-title">
-      <div className="pricing-section-heading"><div className="eyebrow">GOOD TO KNOW</div><h2 id="faq-title">Frequently asked questions.</h2></div>
-      <div className="faq-list">
+    <SplitSection className="pricing-section pricing-faq" eyebrow="GOOD TO KNOW" title="Frequently asked questions." labelledBy="faq-title"><div className="faq-list">
         {questions.map(([question, answer], index) => {
           const isOpen = open === index
           return <div className="faq-item" key={question}>
@@ -28,7 +27,6 @@ export default function PricingFaq() {
             </AnimatePresence>
           </div>
         })}
-      </div>
-    </section>
+      </div></SplitSection>
   )
 }

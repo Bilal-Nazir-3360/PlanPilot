@@ -1,17 +1,11 @@
 import SpotlightCard from '../../../components/ui/SpotlightCard'
 import BillingToggle from './BillingToggle'
 import PlanCard from './PlanCard'
+import SplitSection from '../../../components/ui/SplitSection'
 
 export default function PricingHero() {
   return (
-    <section className="pricing-hero" aria-labelledby="pricing-title">
-      <div className="pricing-hero-copy">
-        <div className="eyebrow">DEMO PRICING</div>
-        <h1 id="pricing-title">Choose the pace that fits your work.</h1>
-        <p>Start with a calm task workspace, then explore deeper planning as your needs grow.</p>
-        <BillingToggle />
-        <p className="pricing-demo-note">Demo pricing. No payment is processed.</p>
-      </div>
+    <SplitSection className="pricing-hero" eyebrow="DEMO PRICING" title="Choose the pace that fits your work." description="Start with a calm task workspace, then explore deeper planning as your needs grow." labelledBy="pricing-title"><div className="pricing-hero-copy"><BillingToggle /><p className="pricing-demo-note">Demo pricing. No payment is processed.</p></div>
       <div className="pricing-plan-grid">
         <PlanCard planId="free" />
         <PlanCard planId="pro" />
@@ -25,6 +19,6 @@ export default function PricingHero() {
         </div>
         <a className="btn" href="/signup">Start free</a>
       </SpotlightCard>
-    </section>
+    </SplitSection>
   )
 }

@@ -1,5 +1,6 @@
 import { Accessibility, Moon, Smartphone, Touchpad } from 'lucide-react'
 import Reveal from '../../../components/ui/Reveal'
+import SplitSection from '../../../components/ui/SplitSection'
 
 const items = [
   [Moon, 'Dark and light themes', 'Switch themes and keep your preference in the browser.'],
@@ -9,5 +10,5 @@ const items = [
 ]
 
 export default function BuiltStrip() {
-  return <Reveal><section className="built-strip" aria-label="Built for real use">{items.map(([Icon, title, description]) => <article key={title}><Icon size={19}/><h3>{title}</h3><p>{description}</p></article>)}</section></Reveal>
+  return <SplitSection className="built-strip" eyebrow="BUILT FOR REAL USE" title="Designed for everyday use" labelledBy="built-strip-title"><Reveal><div className="built-strip-list">{items.map(([Icon, title, description]) => <article key={title}><Icon size={24}/><div><h3>{title}</h3><p>{description}</p></div></article>)}</div></Reveal></SplitSection>
 }

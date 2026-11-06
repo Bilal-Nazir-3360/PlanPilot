@@ -1,6 +1,7 @@
 import { Check, Minus } from 'lucide-react'
 import { Fragment } from 'react'
 import { plans } from '../../../data/plans'
+import SplitSection from '../../../components/ui/SplitSection'
 
 const categories = ['Tasks', 'Planning', 'Analytics', 'Collaboration', 'Support']
 const allFeatures = categories.map((category) => ({
@@ -25,12 +26,7 @@ function Cell({ status }) {
 
 export default function ComparisonTable() {
   return (
-    <section className="pricing-section comparison-section" aria-labelledby="comparison-title">
-      <div className="pricing-section-heading">
-        <div className="eyebrow">AT A GLANCE</div>
-        <h2 id="comparison-title">Compare the demo plans.</h2>
-      </div>
-      <div className="comparison-scroll">
+    <SplitSection className="pricing-section comparison-section" eyebrow="AT A GLANCE" title="Compare the demo plans." labelledBy="comparison-title"><div className="comparison-scroll">
         <table>
           <caption>Feature availability by demo plan. Live features are available today; Soon features are planned.</caption>
           <thead>
@@ -50,7 +46,6 @@ export default function ComparisonTable() {
             ))}
           </tbody>
         </table>
-      </div>
-    </section>
+      </div></SplitSection>
   )
 }
