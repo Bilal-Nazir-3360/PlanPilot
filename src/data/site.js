@@ -1,5 +1,6 @@
 export const siteName = 'PlanPilot'
 export const BACKGROUND_ANIMATION = true
+export const NAV_MODE = 'always-collapsed'
 export const tagline = 'A focused task-management workspace for clearer planning and follow-through.'
 export const githubUrl = 'https://github.com/Bilal-Nazir-3360'
 export const linkedinUrl = 'https://www.linkedin.com/in/mbilal-nazir'

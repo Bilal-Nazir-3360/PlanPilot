@@ -46,8 +46,9 @@ export default function App() {
       <WaveBackground />
       <ToastNotice />
       {publicRoute && <Navbar />}
-      <Suspense fallback={<RouteFallback />}>
-        <Routes>
+      <div className={publicRoute ? 'public-layout-content' : undefined}>
+        <Suspense fallback={<RouteFallback />}>
+          <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/features" element={<Features />} />
           <Route path="/pricing" element={<Pricing />} />
@@ -67,9 +68,10 @@ export default function App() {
           <Route path="/dashboard/billing" element={<ProtectedRoute><DashboardErrorBoundary><DashPage title="Billing" sub="Explore your demo plan and workspace limits."><Billing /></DashPage></DashboardErrorBoundary></ProtectedRoute>} />
           <Route path="/dashboard/settings" element={<ProtectedRoute><DashboardErrorBoundary><DashPage title="Settings" sub="Your workspace, your way."><Settings /></DashPage></DashboardErrorBoundary></ProtectedRoute>} />
           <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Suspense>
-      {publicRoute && <Footer />}
+          </Routes>
+        </Suspense>
+        {publicRoute && <Footer />}
+      </div>
     </>
   )
 }
