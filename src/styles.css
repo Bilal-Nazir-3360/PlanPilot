@@ -77,6 +77,7 @@ textarea:focus-visible,input:focus-visible,select:focus-visible,button:focus-vis
 .nav-text-button{border:0;background:transparent;cursor:pointer;font:inherit}
 .nav-signup-link{border:1px solid #44404a;border-radius:7px;padding:0 13px}
 .nav-cta-link .btn{min-height:44px}
+.account-menu-wrap{position:relative}.account-trigger{min-height:44px;display:inline-flex;align-items:center;gap:7px;border:0;background:transparent;color:#a6abb9;font:500 .85rem inherit;cursor:pointer}.account-trigger:hover{color:#e2b659}.account-trigger .avatar{width:30px;height:30px;background:#e2b659;color:#17140e}.account-menu{position:absolute;top:calc(100% + 10px);right:0;z-index:30;min-width:215px;padding:8px;background:#171b24;border:1px solid #303542;border-radius:8px;box-shadow:0 18px 40px rgba(0,0,0,.25)}.account-menu a,.account-menu button{display:flex;width:100%;min-height:44px;align-items:center;padding:0 12px;border:0;background:transparent;color:#c6c9cf;font:inherit;text-align:left;cursor:pointer;border-radius:5px}.account-menu a:hover,.account-menu button:hover,.account-menu a:focus-visible,.account-menu button:focus-visible{background:rgba(226,182,89,.08);color:#e2b659}.account-details{display:grid;gap:3px;padding:10px 12px 12px}.account-details b{font-size:.82rem}.account-details small,.mobile-account-details small{color:#747b8c;font-size:.7rem;overflow:hidden;text-overflow:ellipsis}.account-divider{height:1px;margin:6px 0;background:#303542}.mobile-account-details{display:flex;align-items:center;gap:10px;padding:12px;border-bottom:1px solid #303542}.mobile-account-details div{display:grid;gap:3px;min-width:0}.mobile-account-details b{font-size:.85rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.back-to-website{font-size:.78rem!important}.toast-notice{position:fixed;right:24px;bottom:24px;z-index:100;padding:13px 17px;border:1px solid #e2b659;border-radius:7px;background:#171b24;color:#f4f1ea;box-shadow:0 12px 30px rgba(0,0,0,.22);font-size:.85rem}
 .mobile-nav-sheet{display:none}
 .site-footer{max-width:1180px;margin:auto;padding:52px 28px 30px;border-top:1px solid #272b35;display:grid;grid-template-columns:1.6fr 2fr;gap:38px;color:#73798b}
 .footer-brand p{max-width:320px;margin:15px 0;color:#a6abb9;font-size:.85rem;line-height:1.6}
@@ -90,9 +91,10 @@ textarea:focus-visible,input:focus-visible,select:focus-visible,button:focus-vis
 .auth-page>main{display:grid;place-items:center;min-height:100vh}
 .auth-card h1{font:600 2rem 'Space Grotesk';margin:0 0 8px}
 .light .public-header.is-scrolled{background:rgba(245,243,239,.88);border-color:rgba(27,29,36,.1)}
+.light .account-menu{background:#fbfaf7;border-color:#d6d0c4}.light .account-menu a,.light .account-menu button,.light .account-trigger{color:#626879}.light .account-details b,.light .mobile-account-details b{color:#1b1d24}.light .toast-notice{background:#fbfaf7;color:#1b1d24}
 .light .footer-groups h2{color:#1b1d24}
 @media(max-width:767px){
-  .desktop-nav-links,.nav-account-link,.nav-cta-link{display:none}
+  .desktop-nav-links,.nav-account-link,.nav-cta-link,.account-menu-wrap{display:none}
   .nav-actions .mobile-menu{display:inline-flex}
   .mobile-nav-sheet{display:grid;gap:4px;position:absolute;top:100%;left:10px;right:10px;padding:12px;background:#171b24;border:1px solid #303542;border-radius:8px;box-shadow:0 18px 40px rgba(0,0,0,.25)}
   .mobile-nav-link{display:flex;align-items:center;min-height:44px;padding:0 12px;color:#a6abb9}

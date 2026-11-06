@@ -4,6 +4,7 @@ import AmbientBackground from './components/AmbientBackground'
 import Home from './pages/public/Home'
 import ProtectedRoute from './routes/ProtectedRoute'
 import DashboardErrorBoundary from './components/ui/DashboardErrorBoundary'
+import { useToast } from './context/ToastContext'
 
 const About = lazy(() => import('./pages/public/About'))
 const Contact = lazy(() => import('./pages/public/Contact'))
@@ -29,10 +30,16 @@ function RouteFallback() {
   return <div className="route-fallback" role="status" aria-busy="true" aria-live="polite"><span className="route-spinner" aria-hidden="true"/>Loading page…</div>
 }
 
+function ToastNotice() {
+  const { toast } = useToast()
+  return toast ? <div className="toast-notice" role="status" aria-live="polite">{toast}</div> : null
+}
+
 export default function App() {
   return (
     <>
       <AmbientBackground />
+      <ToastNotice />
       <Suspense fallback={<RouteFallback />}>
         <Routes>
           <Route path="/" element={<Home />} />
