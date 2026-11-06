@@ -1,3 +1,4 @@
 export default function StatusBadge({ status }) {
-  return <span className={`feature-status feature-status-${status.toLowerCase().replace(' ', '-')}`}>{status}</span>
+  const label = status === 'Coming soon' ? 'Soon' : status
+  return <span className={`feature-status feature-status-${status.toLowerCase().replace(' ', '-')}`}>{label}</span>
 }
