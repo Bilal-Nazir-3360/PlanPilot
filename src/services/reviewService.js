@@ -1,88 +1,59 @@
-import seedReviews from '../data/reviews'
-import { getItem, removeItem, setItem } from './storage'
+import { api } from './api'
 import validateReview, { cleanReview } from '../utils/validateReview'
 
-const REVIEWS_KEY = 'pp_reviews'
-let lastReviewSubmittedAt = 0
-
-const cleanText = (value) => String(value ?? '').replace(/[\u0000-\u001f\u007f-\u009f]/g, '').replace(/\s+/g, ' ').trim()
-
-const normalizeReview = (review, index = 0) => {
-  const comment = cleanText(review?.comment ?? review?.text)
-  const createdAt = review?.createdAt || (review?.date ? new Date(review.date).toISOString() : new Date().toISOString())
+const normalizeReview = (review) => {
+  const comment = String(review?.comment ?? review?.text ?? '').trim()
+  const createdAt = review?.createdAt || new Date().toISOString()
   return {
-    id: review?.id ?? `review-${Date.now()}-${index}`,
-    name: cleanText(review?.name),
-    role: cleanText(review?.role).slice(0, 60),
-    rating: Number(review?.rating) >= 1 && Number(review?.rating) <= 5 ? Number(review.rating) : 1,
+    ...review,
+    id: review?.id,
+    name: String(review?.name ?? '').trim(),
+    role: String(review?.role ?? '').trim(),
+    rating: Number(review?.rating),
     comment,
     createdAt,
     isSample: review?.isSample === true,
-    ownerId: typeof review?.ownerId === 'string' ? review.ownerId : null,
+    ownerId: review?.ownerId ?? null,
     text: comment,
     date: createdAt.slice(0, 10),
   }
 }
 
-const normalizeReviews = (reviews) => (Array.isArray(reviews) ? reviews : seedReviews).map(normalizeReview)
-
-export const getReviews = () => {
-  try {
-    const saved = getItem(REVIEWS_KEY, null)
-    if (saved === null) {
-      const seeded = normalizeReviews(seedReviews)
-      setItem(REVIEWS_KEY, seeded)
-      return seeded
-    }
-    return normalizeReviews(saved)
-  } catch {
-    return normalizeReviews(seedReviews)
-  }
+export async function getReviews() {
+  const { reviews } = await api('/api/reviews')
+  return (Array.isArray(reviews) ? reviews : []).map(normalizeReview)
 }
 
-export const saveReviews = (reviews) => {
-  try {
-    setItem(REVIEWS_KEY, normalizeReviews(reviews))
-  } catch {
-    // Storage failures leave the in-memory review state usable.
-  }
-}
-
-export const getReviewRateLimitRemaining = () => Math.max(0, 30000 - (Date.now() - lastReviewSubmittedAt))
-
-export const addReview = (review) => {
-  const remaining = getReviewRateLimitRemaining()
-  if (remaining > 0) return { reviews: getReviews(), error: `Please wait ${Math.ceil(remaining / 1000)} seconds before submitting another review.` }
+export async function addReview(review) {
   const clean = cleanReview(review)
   const errors = validateReview(clean)
-  if (Object.keys(errors).length) return { reviews: getReviews(), error: 'Please fix the highlighted review fields.' }
-  const next = [normalizeReview(clean), ...getReviews()]
-  saveReviews(next)
-  lastReviewSubmittedAt = Date.now()
-  return { reviews: next, error: null }
+  if (Object.keys(errors).length) {
+    const error = new Error('Please fix the highlighted review fields.')
+    error.errors = errors
+    throw error
+  }
+  const { review: created } = await api('/api/reviews', {
+    method: 'POST',
+    body: { ...clean, website: clean.website || '' },
+  })
+  return normalizeReview(created)
 }
 
-export const updateReview = (id, changes) => {
+export async function updateReview(id, changes) {
   const clean = cleanReview(changes)
   const errors = validateReview(clean)
-  const current = getReviews()
-  if (Object.keys(errors).length) return { reviews: current, error: 'Please fix the highlighted review fields.' }
-  const next = current.map((review) => review.id === id ? normalizeReview({ ...review, ...clean }) : review)
-  saveReviews(next)
-  return { reviews: next, error: null }
-}
-
-export const deleteReview = (id) => {
-  const next = getReviews().filter((review) => review.id !== id)
-  saveReviews(next)
-  return next
-}
-
-export const clearReviews = () => {
-  try {
-    removeItem(REVIEWS_KEY)
-  } catch {
-    // Storage failures do not prevent the in-memory state from resetting.
+  if (Object.keys(errors).length) {
+    const error = new Error('Please fix the highlighted review fields.')
+    error.errors = errors
+    throw error
   }
-  return normalizeReviews(seedReviews)
+  const { review } = await api(`/api/reviews/${id}`, {
+    method: 'PATCH',
+    body: clean,
+  })
+  return normalizeReview(review)
+}
+
+export async function deleteReview(id) {
+  await api(`/api/reviews/${id}`, { method: 'DELETE' })
 }

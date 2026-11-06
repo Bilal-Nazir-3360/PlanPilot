@@ -7,7 +7,7 @@ import { useAuth } from '../../../context/AuthContext'
 import { addMessage } from '../../../services/contactService'
 import validateContact, { cleanContactMessage } from '../../../utils/validateContact'
 
-const initialValues = { name: '', email: '', subject: '', message: '', honeypot: '' }
+const initialValues = { name: '', email: '', subject: '', message: '', website: '' }
 
 export default function ContactForm({ onSuccess }) {
   const { user } = useAuth()
@@ -23,7 +23,7 @@ export default function ContactForm({ onSuccess }) {
     setFormError('')
   }
 
-  const submit = (event) => {
+  const submit = async (event) => {
     event.preventDefault()
     const clean = cleanContactMessage(values)
     const nextErrors = validateContact(clean)
@@ -33,14 +33,15 @@ export default function ContactForm({ onSuccess }) {
       return
     }
     setSending(true)
-    const result = addMessage(clean)
-    if (result.error) {
-      setErrors(result.errors || {})
-      setFormError(result.error)
+    try {
+      const confirmation = await addMessage(clean)
+      onSuccess(confirmation)
+    } catch (error) {
+      setErrors(error.errors || {})
+      setFormError(error.message || 'Could not save your message.')
       setSending(false)
       return
     }
-    onSuccess(result.message)
   }
 
   const fieldError = (field) => errors[field] ? <span id={`${field}-error`} className="form-error">{errors[field]}</span> : null
@@ -52,7 +53,7 @@ export default function ContactForm({ onSuccess }) {
     <label htmlFor={`${messageId}-email`}>Email<input id={`${messageId}-email`} name="email" value={values.email} onChange={(event) => update('email', event.target.value)} type="email" autoComplete="email" aria-invalid={Boolean(errors.email)} aria-describedby={describedBy('email')} />{fieldError('email')}</label>
     <label htmlFor={`${messageId}-subject`}>Subject<input id={`${messageId}-subject`} name="subject" value={values.subject} onChange={(event) => update('subject', event.target.value)} aria-invalid={Boolean(errors.subject)} aria-describedby={describedBy('subject')} />{fieldError('subject')}</label>
     <label htmlFor={`${messageId}-message`}>Message<textarea id={`${messageId}-message`} name="message" value={values.message} onChange={(event) => update('message', event.target.value)} rows="6" maxLength="1000" aria-invalid={Boolean(errors.message)} aria-describedby={`${messageId}-counter${errors.message ? ` message-error` : ''}`} /> <span id={`${messageId}-counter`} className="character-counter" aria-live="polite">{values.message.length}/1000 characters</span>{fieldError('message')}</label>
-    <label className="contact-honeypot" aria-hidden="true">Company<input tabIndex="-1" name="honeypot" value={values.honeypot} onChange={(event) => update('honeypot', event.target.value)} autoComplete="off" /></label>
+    <label className="contact-honeypot" aria-hidden="true">Website<input tabIndex="-1" name="website" value={values.website} onChange={(event) => update('website', event.target.value)} autoComplete="off" /></label>
     <Button type="submit" disabled={sending}><Send size={15} />{sending ? 'Saving…' : 'Save message'}</Button>
   </SpotlightCard></Reveal>
 }

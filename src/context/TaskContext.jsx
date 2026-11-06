@@ -3,7 +3,7 @@ import { useAuth } from './AuthContext'
 import { useToast } from './ToastContext'
 import { createTask, deleteTask as deleteTaskFromService, getTasks, reorderTasks as reorderTasksInService, updateTask as updateTaskInService } from '../services/taskService'
 import { moveTask as moveTaskInOrder } from '../utils/taskOrder'
-import { addReview as addReviewToService, clearReviews as clearReviewsFromService, deleteReview as deleteReviewFromService, getReviews, saveReviews, updateReview as updateReviewInService } from '../services/reviewService'
+import { addReview as addReviewToService, deleteReview as deleteReviewFromService, getReviews, updateReview as updateReviewInService } from '../services/reviewService'
 
 const TaskContext = createContext(null)
 export function TaskProvider({ children }) {
@@ -12,8 +12,21 @@ export function TaskProvider({ children }) {
   const [tasks, setTasks] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [reviews, setReviews] = useState(getReviews)
-  useEffect(() => saveReviews(reviews), [reviews])
+  const [reviews, setReviews] = useState([])
+  const [reviewsLoading, setReviewsLoading] = useState(true)
+  const [reviewsError, setReviewsError] = useState(null)
+  const loadReviews = async () => {
+    setReviewsLoading(true)
+    setReviewsError(null)
+    try {
+      setReviews(await getReviews())
+    } catch (loadError) {
+      setReviewsError(loadError)
+    } finally {
+      setReviewsLoading(false)
+    }
+  }
+  useEffect(() => { loadReviews() }, [])
   const loadTasks = async (isActive = () => true) => {
     setLoading(true)
     setError(null)
@@ -73,19 +86,21 @@ export function TaskProvider({ children }) {
     const nextTasks = moveTaskInOrder(tasks, id, status)
     return reorderTasks(nextTasks)
   }
-  const addReview = (review) => {
-    const result = addReviewToService(review)
-    setReviews(result.reviews)
-    return result
+  const addReview = async (review) => {
+    const created = await addReviewToService(review)
+    setReviews((current) => [created, ...current])
+    return created
   }
-  const updateReview = (id, changes) => {
-    const result = updateReviewInService(id, changes)
-    setReviews(result.reviews)
-    return result
+  const updateReview = async (id, changes) => {
+    const updated = await updateReviewInService(id, changes)
+    setReviews((current) => current.map((review) => review.id === id ? updated : review))
+    return updated
   }
-  const deleteReview = (id) => setReviews(deleteReviewFromService(id))
+  const deleteReview = async (id) => {
+    await deleteReviewFromService(id)
+    setReviews((current) => current.filter((review) => review.id !== id))
+  }
   const clearTasks = () => setTasks([])
-  const clearReviews = () => setReviews(clearReviewsFromService())
-  return <TaskContext.Provider value={{ tasks, setTasks, loading, error, reloadTasks: loadTasks, addTask, updateTask, deleteTask, moveTask, reorderTasks, reviews, addReview, updateReview, deleteReview, clearTasks, clearReviews }}>{children}</TaskContext.Provider>
+  return <TaskContext.Provider value={{ tasks, setTasks, loading, error, reloadTasks: loadTasks, addTask, updateTask, deleteTask, moveTask, reorderTasks, reviews, reviewsLoading, reviewsError, reloadReviews: loadReviews, addReview, updateReview, deleteReview, clearTasks }}>{children}</TaskContext.Provider>
 }
 export const useTasks = () => useContext(TaskContext)

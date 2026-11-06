@@ -3,7 +3,8 @@ import { useTasks } from './TaskContext'
 import { useTheme } from './ThemeContext'
 import { useToast } from './ToastContext'
 import { usePlan } from './PlanContext'
-import { clearMessages } from '../services/contactService'
+import { useProjects } from './ProjectContext'
+import { useTeam } from './TeamContext'
 
 export function useApp() {
   const auth = useAuth()
@@ -11,18 +12,20 @@ export function useApp() {
   const theme = useTheme()
   const toast = useToast()
   const plan = usePlan()
+  const projects = useProjects()
+  const team = useTeam()
   return {
     ...taskState,
     ...theme,
     ...auth,
     ...toast,
     ...plan,
+    ...projects,
+    ...team,
     clearData: () => {
-      taskState.clearTasks()
-      taskState.clearReviews()
+      theme.clearTheme()
       plan.clearPlan()
-      clearMessages()
-      toast.setToast('Workspace data cleared')
+      toast.setToast('Theme and plan settings cleared')
     },
     addTask: async (task) => {
       await taskState.addTask(task)
@@ -40,8 +43,8 @@ export function useApp() {
       taskState.moveTask(id, status, order)
       toast.setToast('Task moved')
     },
-    addReview: (review) => {
-      taskState.addReview({ ...review, ownerId: auth.user?.email || null })
+    addReview: async (review) => {
+      await taskState.addReview(review)
       toast.setToast('Thanks for sharing your experience')
     },
   }

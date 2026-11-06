@@ -6,6 +6,7 @@ export function cleanReview(review) {
     name: sanitize(review.name),
     role: sanitize(review.role),
     comment: sanitize(review.comment ?? review.text),
+    website: sanitize(review.website ?? review.honeypot),
   }
 }
 
@@ -16,5 +17,6 @@ export default function validateReview(review) {
   if (clean.role.length > 60) errors.role = 'Role must be 60 characters or fewer.'
   if (![1, 2, 3, 4, 5].includes(Number(clean.rating))) errors.rating = 'Choose a rating from 1 to 5.'
   if (clean.comment.length < 10 || clean.comment.length > 500) errors.comment = 'Review must be between 10 and 500 characters.'
+  if (clean.website) errors.website = 'Please leave this field blank.'
   return errors
 }

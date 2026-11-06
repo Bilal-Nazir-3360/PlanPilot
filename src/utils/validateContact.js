@@ -7,7 +7,7 @@ export const cleanContactMessage = (message = {}) => ({
   email: cleanContactValue(message.email),
   subject: cleanContactValue(message.subject),
   message: cleanContactValue(message.message),
-  honeypot: cleanContactValue(message.honeypot),
+  website: cleanContactValue(message.website ?? message.honeypot),
 })
 
 export default function validateContact(message = {}) {
@@ -17,6 +17,6 @@ export default function validateContact(message = {}) {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clean.email)) errors.email = 'Enter a valid email address.'
   if (clean.subject.length < 3 || clean.subject.length > 100) errors.subject = 'Subject must be between 3 and 100 characters.'
   if (clean.message.length < 10 || clean.message.length > 1000) errors.message = 'Message must be between 10 and 1000 characters.'
-  if (clean.honeypot) errors.honeypot = 'Please leave this field blank.'
+  if (clean.website) errors.website = 'Please leave this field blank.'
   return errors
 }

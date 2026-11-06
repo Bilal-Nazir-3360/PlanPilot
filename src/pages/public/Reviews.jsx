@@ -12,7 +12,7 @@ import { filterByRating, sortReviews } from '../../utils/reviewStats'
 import Modal from '../../components/ui/Modal'
 
 export default function Reviews() {
-  const { reviews, user } = useApp()
+  const { reviews, reviewsLoading, reviewsError, reloadReviews, user } = useApp()
   const formRef = useRef(null)
   const [sortMode, setSortMode] = useState('newest')
   const [rating, setRating] = useState('all')
@@ -39,7 +39,7 @@ export default function Reviews() {
     <ReviewsHero onWrite={scrollToForm} />
     <RatingSummary reviews={reviews} onRating={setRating} />
     <ReviewControls sortMode={sortMode} setSortMode={setSortMode} rating={rating} setRating={setRating} search={search} setSearch={setSearch} clearFilters={clearFilters} total={reviews.length} shown={filtered.length} />
-    <ReviewList reviews={filtered} user={user} highlighted={highlighted} onEdit={setEditing} onClearFilters={clearFilters} />
+    <ReviewList reviews={filtered} user={user} highlighted={highlighted} onEdit={setEditing} onClearFilters={clearFilters} loading={reviewsLoading} error={reviewsError} onRetry={reloadReviews} />
     <div ref={formRef}>{editing ? <Modal open onClose={() => setEditing(null)} labelledBy="edit-review-title"><ReviewForm user={user} editing={editing} onClose={() => setEditing(null)} onSuccess={afterSubmit} /></Modal> : <ReviewForm user={user} onClose={() => setEditing(null)} onSuccess={afterSubmit} />}</div>
   </main><Footer/></>
 }
