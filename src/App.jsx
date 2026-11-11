@@ -7,6 +7,7 @@ import ProtectedRoute from './routes/ProtectedRoute'
 import DashboardErrorBoundary from './components/ui/DashboardErrorBoundary'
 import WaveBackground from './components/WaveBackground'
 import { useToast } from './context/ToastContext'
+import ScrollManager from './components/ScrollManager'
 
 const About = lazy(() => import('./pages/public/About'))
 const Contact = lazy(() => import('./pages/public/Contact'))
@@ -43,6 +44,7 @@ export default function App() {
 
   return (
     <>
+      <ScrollManager />
       <WaveBackground />
       <ToastNotice />
       {publicRoute && <Navbar />}

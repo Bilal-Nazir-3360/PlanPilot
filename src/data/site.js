@@ -21,6 +21,7 @@ export const aboutStory = {
 export const isRealValue = (value) => Boolean(value && !/^\[.*\]$/.test(value) && !/^your[- ]/i.test(value) && !/example\.com|your-profile|your-username/i.test(value))
 
 export const navLinks = [
+  { label: 'Home', to: '/' },
   { label: 'Features', to: '/features' },
   { label: 'Pricing', to: '/pricing' },
   { label: 'Reviews', to: '/reviews' },
