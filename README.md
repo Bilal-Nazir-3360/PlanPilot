@@ -1,49 +1,41 @@
 # PlanPilot
 
-> A full-stack task-management workspace for planning and follow-through.
+> A full-stack task-management workspace for clearer planning and follow-through.
 
+[![CI](https://github.com/Bilal-Nazir-3360/PlanPilot/actions/workflows/ci.yml/badge.svg)](https://github.com/Bilal-Nazir-3360/PlanPilot/actions/workflows/ci.yml)
 [![React 18](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white)](https://react.dev/)
 [![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)](https://vite.dev/)
 [![Express](https://img.shields.io/badge/Express-5-000000?logo=express&logoColor=white)](https://expressjs.com/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-9.12-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 [![Framer Motion](https://img.shields.io/badge/Framer%20Motion-EF008F)](https://motion.dev/)
-![Status: prototype](https://img.shields.io/badge/status-prototype-e2b659)
+![Status: portfolio project](https://img.shields.io/badge/status-portfolio%20project-e2b659)
 
-Live demo: `<add link after deployment>`
-
-Screenshots: add images under `docs/screenshots/` after they are captured.
-
-## What it is
-
-PlanPilot is a full-stack MERN portfolio project with a React task workspace and an Express API backed by MongoDB. The public site includes a demo billing system with Free, Pro, and Team plan states. No real payments exist or are processed.
+PlanPilot is a full-stack MERN task manager with a React workspace, an Express API, MongoDB persistence, and a demo billing system. It does not process real payments. There is no live deployment; run it locally from this GitHub repository.
 
 ## Features
 
 ### Public site
 
 - Home, Features, Pricing, Reviews, About, Contact, Privacy, and Terms pages.
-- Review listing and submission, with authenticated edit/delete for a user's own non-sample reviews.
-- Contact form submission with validation and rate limiting.
+- Public sample reviews, optional authenticated review submission, and owner-only review editing/deletion.
+- Contact message submission with validation and rate limiting.
 
 ### Workspace
 
-- JWT-cookie authentication with signup, login, logout, and session lookup.
-- Task CRUD, status columns, due dates, priorities, projects, tags, search, filters, and drag-and-drop ordering.
-- Project CRUD with task progress, and team-member CRUD with names, emails, and roles.
-- Calendar, analytics, overview, settings, and protected dashboard routes.
-- Dark/light theme switching.
+- Signup, login, logout, session lookup, and protected dashboard routes.
+- Task CRUD with Todo, In progress, and Done statuses, priorities, due dates, projects, tags, search, filters, and drag-and-drop ordering.
+- Project CRUD, task progress, team-member CRUD, calendar view, analytics, overview, and settings.
+- Dark and light themes.
 
 ### Plans (demo)
 
-- Free, Pro, and Team selection with monthly/yearly display and local plan-change history.
-- Free plan: 25 active tasks, one workspace, board/search, calendar, and summary analytics.
-- Pro plan: unlimited tasks, priority/project filters, and full analytics charts.
-- Team plan: Pro features plus team directory, invites, roles, and shared project progress.
-- Plan selection is local demo state; it does not change server permissions or process payments.
+- Free, Pro, and Team plan selection with monthly/yearly display and local change history.
+- Browser-only plan limits and feature gates; no server billing permissions.
+- No real payment provider or payment processing.
 
 ### Backend
 
-- Express API for auth, tasks, reviews, contact messages, projects, and team members.
+- Express API for authentication, tasks, reviews, contact messages, projects, team members, and demo reset.
 - MongoDB persistence through Mongoose and Zod request validation.
 - Owner-scoped workspace queries and JSON error responses.
 
@@ -51,46 +43,68 @@ PlanPilot is a full-stack MERN portfolio project with a React task workspace and
 
 ```mermaid
 flowchart LR
-  R[React client<br/>Vercel target] -- "fetch + credentials: include" --> E[Express API<br/>Render target]
-  E -- "Mongoose" --> M[(MongoDB<br/>Atlas target)]
-  E -- "Set-Cookie: pp_token" --> C[Browser httpOnly JWT cookie]
-  C -- "Cookie: pp_token" --> E
+  R[React 18 client<br/>Vite dev proxy] -->|fetch /api + credentials| E[Express API]
+  E -->|Mongoose| M[(MongoDB)]
+  E -->|Set-Cookie: pp_token| B[Browser httpOnly JWT cookie]
+  B -->|Cookie: pp_token| E
 ```
 
-The hosting labels are deployment targets, not deployed environments in this repository.
+In development, Vite proxies `/api` requests to `http://localhost:5000`. The API signs a JWT after login or signup and stores it in the `pp_token` httpOnly cookie.
 
 ## Tech stack
 
-**Client:** React 18, React Router 6, Vite, Framer Motion, Tailwind CSS, custom CSS, dnd-kit, Recharts, Lucide React, Context API.
+**Client:** React 18, React Router 6, Vite, Framer Motion, Tailwind CSS, custom CSS, dnd-kit, Recharts, Lucide React, and React Context.
 
-**Server:** Node.js 18+, Express 5, Mongoose, MongoDB, JWT, bcryptjs, Zod, cookie-parser, CORS, Helmet, Morgan, express-rate-limit.
+**Server:** Node.js 18+, Express 5, Mongoose, MongoDB, JSON Web Tokens, bcryptjs, Zod, cookie-parser, CORS, Helmet, Morgan, and express-rate-limit.
 
-## Run locally
+## Run it locally in 5 minutes
 
-Prerequisites: Node.js 18.11+ and a running MongoDB instance.
+### Prerequisites
+
+- Node.js 18.11 or newer.
+- MongoDB Community running locally, or a free MongoDB Atlas connection string.
+
+### Steps
 
 ```bash
+git clone https://github.com/Bilal-Nazir-3360/PlanPilot.git
+cd PlanPilot
+npm install
+cd server
+npm install
+cd ..
 cp .env.example .env
 cp server/.env.example server/.env
-npm install
-npm --prefix server install
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
+Copy the generated value into `server/.env` as `JWT_SECRET`. Then seed the demo workspace and start both apps:
+
+```bash
+cd server
+npm run seed
+cd ..
 npm run dev
 ```
 
-`npm run dev` starts Vite and the API together. The client normally runs at `http://localhost:5173` and the API at `http://localhost:5000`.
+The client runs at `http://localhost:5173`; the API runs at `http://localhost:5000`.
 
-## Environment variables
+Demo login: `demo@planpilot.app` / `planpilot-demo`
+
+The demo account is shared; restore its sample data any time with POST /api/demo/reset while signed in as the demo user.
+
+### Environment variables
 
 Values below are examples only. Do not commit real secrets.
 
-### Client (`.env`)
+**Client: `.env`**
 
 | Variable | Example |
 | --- | --- |
 | `VITE_APP_NAME` | `PlanPilot` |
-| `VITE_API_URL` | *(empty; uses the Vite `/api` proxy)* |
+| `VITE_API_URL` | *(empty; uses the Vite dev proxy)* |
 
-### Server (`server/.env`)
+**Server: `server/.env`**
 
 | Variable | Example |
 | --- | --- |
@@ -98,12 +112,13 @@ Values below are examples only. Do not commit real secrets.
 | `NODE_ENV` | `development` |
 | `MONGODB_URI` | `mongodb://127.0.0.1:27017/planpilot` |
 | `CLIENT_URL` | `http://localhost:5173` |
-| `JWT_SECRET` | `replace-with-a-long-random-string-of-32-or-more-characters` |
+| `JWT_SECRET` | `generated-with-the-node-one-liner` |
 | `JWT_EXPIRES_IN` | `7d` |
+| `DEMO_PASSWORD` | `planpilot-demo` *(optional override)* |
 
 ## API reference
 
-All paths are relative to the API origin. JSON bodies are validated where a body is accepted.
+Paths are relative to the API origin. Auth means the `pp_token` cookie is required.
 
 | Method | Path | Auth | Description |
 | --- | --- | --- | --- |
@@ -114,27 +129,27 @@ All paths are relative to the API origin. JSON bodies are validated where a body
 | GET, POST | `/api/tasks` | Yes | List or create owned tasks. |
 | PATCH | `/api/tasks/reorder` | Yes | Reorder owned tasks. |
 | PATCH, DELETE | `/api/tasks/:id` | Yes | Update or delete an owned task. |
-| GET, POST | `/api/reviews` | GET no; POST optional | List reviews or create a review. |
+| GET, POST | `/api/reviews` | GET no; POST optional | List reviews or create one. |
 | PATCH, DELETE | `/api/reviews/:id` | Yes | Update or delete the signed-in user's non-sample review. |
 | POST | `/api/contact` | No | Save a contact message. |
 | GET, POST | `/api/projects` | Yes | List or create owned projects. |
 | GET, PATCH, DELETE | `/api/projects/:id` | Yes | Read, update, or delete an owned project. |
 | GET, POST | `/api/team` | Yes | List or create owned team members. |
 | GET, PATCH, DELETE | `/api/team/:id` | Yes | Read, update, or delete an owned team member. |
-| GET | `/api/health` | No | Return API and MongoDB connection status. |
+| POST | `/api/demo/reset` | Yes; demo user only | Reset the demo user's projects, tasks, team, and sample review data. |
 
 ## Security notes
 
 - Passwords are hashed with bcrypt cost 12.
-- Authentication uses a JWT in the `pp_token` httpOnly cookie; production cookies use `secure` and `SameSite=None`.
+- JWT authentication uses the `pp_token` httpOnly cookie; production cookies also use `secure` and `SameSite=None`.
 - Zod validates request bodies before controllers receive them.
-- Task, project, and team queries are owner-scoped; missing or foreign records return 404. Review updates and deletes are also author-scoped and return 404.
-- Auth is limited to 30 attempts per 15 minutes, reviews to 10 submissions per hour, and contact messages to 5 per hour.
+- Task, project, and team queries are owner-scoped. Missing or foreign records return 404; review edits and deletes are author-scoped and return 404.
+- Auth allows 30 attempts per 15 minutes. Reviews allow 10 submissions per hour, contact allows 5 messages per hour, and demo reset allows 5 requests per hour.
 - Helmet is enabled, CORS uses the configured client origin with credentials, and JSON bodies are limited to 100 KB.
 
 ## Data and persistence
 
-MongoDB stores users, tasks, reviews, contact messages, projects, and team members. The client calls the API for those records. Browser `localStorage` stores only the `pp_theme` theme preference and `pp_plan` demo plan, billing-cycle, and plan-history state.
+MongoDB stores users, tasks, reviews, contact messages, projects, and team members. The browser `localStorage` boundary stores the `pp_theme` theme preference and `pp_plan` demo plan, billing-cycle, and plan-history state.
 
 ## Project structure
 
@@ -143,10 +158,10 @@ MongoDB stores users, tasks, reviews, contact messages, projects, and team membe
 ├── src/
 │   ├── components/     # Layout and reusable UI
 │   ├── context/        # Auth, tasks, projects, team, theme, plan, toast
-│   ├── data/           # Client display data and plan definitions
-│   ├── pages/          # Public and dashboard route pages
+│   ├── data/           # Site, workspace, feature, and plan data
+│   ├── pages/          # Public and dashboard routes
 │   ├── routes/         # Protected route
-│   ├── services/       # API client and local storage boundary
+│   ├── services/       # API services and local-storage boundary
 │   └── utils/
 ├── server/src/
 │   ├── config/         # MongoDB connection
@@ -155,41 +170,38 @@ MongoDB stores users, tasks, reviews, contact messages, projects, and team membe
 │   ├── models/         # Mongoose models
 │   ├── routes/
 │   ├── utils/
-│   ├── validators/
-│   ├── app.js
-│   └── server.js
+│   └── validators/
 ├── .env.example
 └── server/.env.example
 ```
 
 ## Plans and limits
 
-| Plan | Implemented limits and features | Not implemented |
-| --- | --- | --- |
-| Free | 25 active tasks, one workspace, board/search, calendar, summary analytics | — |
-| Pro | Unlimited tasks, one workspace, priority/project filters, full analytics charts | Saved filters, recurring tasks, priority support |
-| Team | Pro features, team directory, invites/roles, shared project progress | Activity log, real-time collaboration, admin controls |
+Plan limits are enforced in the browser only. They do not change server permissions.
 
-## Accessibility and performance
+| Plan | Current demo limits and features |
+| --- | --- |
+| Free | 25 active tasks, 1 workspace, board/search, calendar, summary analytics |
+| Pro | Unlimited tasks, one workspace, priority/project filters, full analytics charts |
+| Team | Pro features, team directory with invites/roles, shared project progress |
 
-- Task drag-and-drop includes pointer, touch, and keyboard sensors.
-- Focus-visible outlines, labeled navigation, live status messages, and reduced-motion CSS are implemented.
-- Routes are lazy-loaded with a loading fallback.
-- Vite splits React, motion, charts, and dnd-kit vendor chunks in production builds.
+## Known limitations
+
+- Plan state and plan limits are client-side only.
+- The calendar uses sample events and does not display task due dates.
+- A GitHub Actions CI workflow runs the client build and a server syntax check; there are no unit tests yet.
+- Free-tier hosting is not set up; this project is hosted only on GitHub.
+- Saved filters, recurring tasks, notifications, real-time collaboration, activity logs, and admin controls are not implemented.
 
 ## Roadmap
 
-- Add Vitest and React Testing Library tests.
-- Add GitHub Actions CI.
-- Deploy the client to Vercel, API to Render, and database to MongoDB Atlas.
-- Add real-time collaboration and recurring tasks.
+- Add automated unit and integration tests.
 - Move plan state and limits to the server.
+- Connect calendar events to task due dates.
+- Add real-time collaboration and recurring tasks.
+- Set up optional free-tier hosting for the client, API, and database.
 
 ## License
 
 MIT. See [LICENSE](LICENSE).
 
-## Claims not verified in the code
-
-- No live demo URL or deployed Vercel, Render, or MongoDB Atlas environment is present in the repository.
-- `docs/screenshots/` is a requested placeholder; no screenshots are currently included.
