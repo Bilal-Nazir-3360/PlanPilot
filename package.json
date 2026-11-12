@@ -9,6 +9,7 @@
     "dev": "concurrently \"npm run client\" \"npm run server\"",
     "client": "vite",
     "server": "npm --prefix server run dev",
+    "seed": "npm --prefix server run seed",
     "build": "vite build",
     "preview": "vite preview"
   },
