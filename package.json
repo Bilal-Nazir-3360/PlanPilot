@@ -42,7 +42,7 @@
     "lucide-react": "latest",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.28.0",
+    "react-router-dom": "^7.18.5",
     "recharts": "latest",
     "tailwindcss": "^3.4.17",
     "vite": "latest"
