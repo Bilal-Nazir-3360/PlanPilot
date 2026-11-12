@@ -208,6 +208,10 @@ Plan limits are enforced in the browser only. They do not change server permissi
 - Add real-time collaboration and recurring tasks.
 - Set up optional free-tier hosting for the client, API, and database.
 
+## Author
+
+PlanPilot is built by [Muhammad Bilal Nazir](https://github.com/Bilal-Nazir-3360).
+
 ## License
 
 MIT. See [LICENSE](LICENSE).
