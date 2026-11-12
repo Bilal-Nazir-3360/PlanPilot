@@ -1,8 +1,27 @@
 {
   "name": "planpilot",
   "version": "1.0.0",
-  "description": "PlanPilot task management workspace",
-  "author": "Bilal Nazir",
+  "description": "Full-stack MERN task manager with JWT cookie auth, Kanban drag-and-drop and analytics",
+  "author": "Muhammad Bilal Nazir",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bilal-Nazir-3360/PlanPilot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Bilal-Nazir-3360/PlanPilot/issues"
+  },
+  "homepage": "https://github.com/Bilal-Nazir-3360/PlanPilot#readme",
+  "keywords": [
+    "react",
+    "express",
+    "mongodb",
+    "mern",
+    "kanban",
+    "jwt",
+    "framer-motion",
+    "portfolio"
+  ],
   "private": true,
   "type": "module",
   "scripts": {

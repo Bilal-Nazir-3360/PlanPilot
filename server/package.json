@@ -1,6 +1,28 @@
 {
   "name": "planpilot-server",
   "version": "1.0.0",
+  "description": "Express and MongoDB API for PlanPilot",
+  "author": "Muhammad Bilal Nazir",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bilal-Nazir-3360/PlanPilot.git",
+    "directory": "server"
+  },
+  "bugs": {
+    "url": "https://github.com/Bilal-Nazir-3360/PlanPilot/issues"
+  },
+  "homepage": "https://github.com/Bilal-Nazir-3360/PlanPilot#readme",
+  "keywords": [
+    "react",
+    "express",
+    "mongodb",
+    "mern",
+    "kanban",
+    "jwt",
+    "framer-motion",
+    "portfolio"
+  ],
   "private": true,
   "type": "module",
   "main": "src/server.js",
