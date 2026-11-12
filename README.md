@@ -12,6 +12,13 @@
 
 PlanPilot is a full-stack MERN task manager with a React workspace, an Express API, MongoDB persistence, and a demo billing system. It does not process real payments. There is no live deployment; run it locally from this GitHub repository.
 
+## Screenshots
+
+![Home](docs/screenshots/home.png)
+![Board](docs/screenshots/board.png)
+![Analytics](docs/screenshots/analytics.png)
+![Pricing](docs/screenshots/pricing.png)
+
 ## Features
 
 ### Public site
