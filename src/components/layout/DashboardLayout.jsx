@@ -76,8 +76,10 @@ function DashboardLayout({ children }) {
       </div>
     </aside>
     <main id="main" className="dashboard-main">
-      <header className="dash-header"><div><span className="eyebrow">PLANPILOT / {titles[loc.pathname]}</span><h2>{titles[loc.pathname] || 'Workspace'}</h2></div><div className="header-actions">{primary && <Link className="btn header-primary" to={primary.to}>{primary.label}</Link>}<button ref={menuButtonRef} className="mobile-menu-toggle icon-btn" onClick={() => setMenuOpen(true)} aria-label="Open navigation"><Menu size={20} /></button></div></header>
-      {children}
+      <div className="dashboard-page-container">
+        <header className="dash-header"><div><span className="eyebrow">PLANPILOT / {titles[loc.pathname]}</span><h2>{titles[loc.pathname] || 'Workspace'}</h2></div><div className="header-actions">{primary && <Link className="btn header-primary" to={primary.to}>{primary.label}</Link>}<button ref={menuButtonRef} className="mobile-menu-toggle icon-btn" onClick={() => setMenuOpen(true)} aria-label="Open navigation"><Menu size={20} /></button></div></header>
+        {children}
+      </div>
     </main>
   </div>
 }

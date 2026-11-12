@@ -104,7 +104,7 @@ export default function AccountMenu({ variant = 'public', user, triggerClassName
   return (
     <>
       <button ref={triggerRef} type="button" className={`account-trigger ${triggerClassName}`} onClick={() => setOpen((value) => !value)} aria-haspopup="menu" aria-expanded={open}>
-        <span className="avatar">{initial}</span><span className="account-trigger-name"><b>{firstName}</b>{currentUser?.email && <small>{currentUser.email}</small>}</span><ChevronIcon />
+        <span className="avatar">{initial}</span><span className="account-trigger-name"><b>{firstName}</b></span><ChevronIcon />
       </button>
       {createPortal(
         <AnimatePresence>

@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react'
 
-export const DISPLACEMENT = 8
+export const DISPLACEMENT = 6
 export const NOISE_FREQUENCY = 0.012
 export const SPEED_BASE = 1
 export const GLOW_OPACITY_FULL = 0.55
@@ -30,7 +30,10 @@ function ElectricCard({
   useEffect(() => {
     const narrow = window.matchMedia('(max-width: 639px)').matches
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    setStaticMode(narrow || reduced || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2))
+    const filterSupported = typeof CSS !== 'undefined' && typeof CSS.supports === 'function' && CSS.supports('filter', 'url(#electric-filter)')
+    const overflow = getComputedStyle(cardRef.current).overflow
+    const fallback = narrow || reduced || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2) || !filterSupported || overflow !== 'visible'
+    setStaticMode(fallback)
     if (!active || !cardRef.current || narrow || reduced) return undefined
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
@@ -62,27 +65,28 @@ function ElectricCard({
     >
       {!staticMode && <svg className="electric-card__effect electric-card__border" style={{ filter: `url(#${filterId}-border)` }} aria-hidden="true" focusable="false">
         <defs>
-          <filter id={`${filterId}-border`} x="-15%" y="-15%" width="130%" height="130%">
+          <filter id={`${filterId}-border`} filterUnits="userSpaceOnUse" x="-20%" y="-20%" width="140%" height="140%" colorInterpolationFilters="sRGB">
             <feTurbulence type="fractalNoise" baseFrequency={NOISE_FREQUENCY} numOctaves="2" seed="7">
-              <animate attributeName="baseFrequency" values={`${NOISE_FREQUENCY};${NOISE_FREQUENCY * 1.15};${NOISE_FREQUENCY}`} dur="8s" repeatCount="indefinite" begin={visible ? '0s' : 'indefinite'} />
+              <animate attributeName="baseFrequency" values={`${NOISE_FREQUENCY};${NOISE_FREQUENCY * 1.15};${NOISE_FREQUENCY}`} dur="9s" repeatCount="indefinite" begin={visible ? '0s' : 'indefinite'} />
             </feTurbulence>
             <feDisplacementMap in="SourceGraphic" scale={DISPLACEMENT} />
           </filter>
         </defs>
-        <rect x="1" y="1" width="calc(100% - 2px)" height="calc(100% - 2px)" rx={radius} />
+        <rect x={DISPLACEMENT * 1.5} y={DISPLACEMENT * 1.5} width={`calc(100% - ${DISPLACEMENT * 3}px)`} height={`calc(100% - ${DISPLACEMENT * 3}px)`} rx={radius} />
       </svg>}
       {!staticMode && <svg className="electric-card__effect electric-card__glow" style={{ filter: `blur(${GLOW_BLUR}px) url(#${filterId}-glow)` }} aria-hidden="true" focusable="false">
         <defs>
-          <filter id={`${filterId}-glow`} x="-15%" y="-15%" width="130%" height="130%">
+          <filter id={`${filterId}-glow`} filterUnits="userSpaceOnUse" x="-20%" y="-20%" width="140%" height="140%" colorInterpolationFilters="sRGB">
             <feTurbulence type="fractalNoise" baseFrequency={NOISE_FREQUENCY} numOctaves="2" seed="7">
-              <animate attributeName="baseFrequency" values={`${NOISE_FREQUENCY};${NOISE_FREQUENCY * 1.15};${NOISE_FREQUENCY}`} dur="8s" repeatCount="indefinite" begin={visible ? '0s' : 'indefinite'} />
+              <animate attributeName="baseFrequency" values={`${NOISE_FREQUENCY};${NOISE_FREQUENCY * 1.15};${NOISE_FREQUENCY}`} dur="9s" repeatCount="indefinite" begin={visible ? '0s' : 'indefinite'} />
             </feTurbulence>
             <feDisplacementMap in="SourceGraphic" scale={DISPLACEMENT} />
           </filter>
         </defs>
-        <rect x="1" y="1" width="calc(100% - 2px)" height="calc(100% - 2px)" rx={radius} />
+        <rect x={DISPLACEMENT * 1.5} y={DISPLACEMENT * 1.5} width={`calc(100% - ${DISPLACEMENT * 3}px)`} height={`calc(100% - ${DISPLACEMENT * 3}px)`} rx={radius} />
       </svg>}
-      <div className="electric-card__surface">{children}</div>
+      <div className="electric-card__surface" aria-hidden="true" />
+      <div className="electric-card__content">{children}</div>
     </Component>
   )
 }

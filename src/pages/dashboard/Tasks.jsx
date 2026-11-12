@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { closestCorners, DndContext, DragOverlay, KeyboardSensor, PointerSensor, TouchSensor, useDroppable, useSensor, useSensors } from '@dnd-kit/core'
 import { sortableKeyboardCoordinates, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { MoreHorizontal, Pencil, Plus, Search, Trash2 } from 'lucide-react'
+import { MoreHorizontal, Plus, Search } from 'lucide-react'
 import { useApp } from '../../context/AppContext'
 import { Link } from 'react-router-dom'
 import Button from '../../components/ui/Button'
@@ -12,14 +12,16 @@ import { moveTask as moveTaskInOrder, reorderTasks as reorderTasksInOrder, TASK_
 
 function TaskCard({ task, onEdit, onDelete, onStatusChange, overlay = false }) {
   const sortable = useSortable({ id: task.id, data: { status: task.status }, disabled: overlay })
+  const [menuOpen, setMenuOpen] = useState(false)
   const style = overlay ? undefined : { transform: CSS.Transform.toString(sortable.transform), transition: sortable.transition }
+  const runAction = (action) => {
+    setMenuOpen(false)
+    action()
+  }
   return <div ref={overlay ? undefined : sortable.setNodeRef} style={style} {...(overlay ? {} : sortable.attributes)} {...(overlay ? {} : sortable.listeners)} className={`task-card ${sortable.isDragging ? 'is-dragging' : ''}`}>
-    <div className="task-top"><span className={`priority ${task.priority.toLowerCase()}`}>{task.priority}</span><div className="task-actions"><button className="icon-btn" onClick={() => onEdit(task)} aria-label={`Edit ${task.title}`}><Pencil size={14}/></button><button className="icon-btn" onClick={() => onDelete(task)} aria-label={`Delete ${task.title}`}><Trash2 size={14}/></button><MoreHorizontal size={16}/></div></div>
-    <b>{task.title}</b>
-    {task.description && <small className="task-description">{task.description}</small>}
-    <small>{task.project}</small>
-    <div className="task-foot"><span>{task.tag}</span><span>{task.due || 'No due date'}</span></div>
-    {!overlay && <label className="task-status-select"><span className="sr-only">Status for {task.title}</span><select value={task.status} onChange={(event) => onStatusChange(task, event.target.value)} aria-label={`Status for ${task.title}`}>{TASK_STATUSES.map((status) => <option key={status}>{status}</option>)}</select></label>}
+    <div className="task-top"><span className={`priority ${task.priority.toLowerCase()}`}>{task.priority}</span><span className="task-due">{task.due || 'No due date'}</span>{!overlay && <div className="task-menu"><button type="button" className="icon-btn task-menu-trigger" onClick={() => setMenuOpen((value) => !value)} aria-label={`Actions for ${task.title}`} aria-haspopup="menu" aria-expanded={menuOpen}><MoreHorizontal size={18}/></button>{menuOpen && <div className="task-menu-list" role="menu" aria-label={`Actions for ${task.title}`}><button type="button" role="menuitem" onClick={() => runAction(() => onEdit(task))}>Edit</button>{TASK_STATUSES.map((status) => <button type="button" role="menuitem" key={status} onClick={() => runAction(() => onStatusChange(task, status))}>Move to {status}</button>)}<button type="button" role="menuitem" onClick={() => runAction(() => onDelete(task))}>Delete</button></div>}</div>}</div>
+    <b className="task-title">{task.title}</b>
+    <div className="task-meta"><span className="task-project">{task.project || 'No project'}</span>{task.tag && <span className="task-tag">{task.tag}</span>}</div>
   </div>
 }
 
@@ -127,7 +129,7 @@ export default function Tasks() {
   }
 
   return <DndContext sensors={sensors} collisionDetection={closestCorners} onDragStart={handleDragStart} onDragCancel={handleDragCancel} onDragEnd={handleDragEnd}>
-    <div className="page-toolbar"><div className="task-filters"><div className="search"><Search size={17}/><input placeholder="Search tasks..." value={query} onChange={(event) => setQuery(event.target.value)} aria-label="Search tasks"/></div><select value={priority} onChange={(event) => setPriority(event.target.value)} aria-label="Filter by priority"><option>All</option><option>High</option><option>Medium</option><option>Low</option></select><select value={project} onChange={(event) => setProject(event.target.value)} aria-label="Filter by project"><option>All</option>{projects.map((item) => <option key={item}>{item}</option>)}</select></div><Button onClick={openCreate}><Plus size={17}/> New task</Button></div>
+    <div className="page-toolbar"><div className="task-filters"><div className="search"><Search size={17}/><input placeholder="Search tasks..." value={query} onChange={(event) => setQuery(event.target.value)} aria-label="Search tasks"/></div><select value={priority} onChange={(event) => setPriority(event.target.value)} aria-label="Priority: All"><option value="All">Priority: All</option><option value="High">Priority: High</option><option value="Medium">Priority: Medium</option><option value="Low">Priority: Low</option></select><select value={project} onChange={(event) => setProject(event.target.value)} aria-label="Project: All"><option value="All">Project: All</option>{projects.map((item) => <option key={item} value={item}>Project: {item}</option>)}</select>{isFiltered && <button type="button" className="filter-clear text-link" onClick={() => { setQuery(''); setPriority('All'); setProject('All') }}>Clear</button>}</div></div>
     {limitMessage && <p className="plan-limit-message" role="alert">{limitMessage} <Link to="/dashboard/billing">Upgrade</Link></p>}
     {isFiltered && <p className="filter-hint" role="status">Filtering is active. Drag-and-drop reordering is disabled until filters are cleared.</p>}
     {loading && <div className="tasks-loading" aria-busy="true" aria-label="Loading tasks"><div className="task-skeleton"/><div className="task-skeleton"/><div className="task-skeleton"/></div>}
