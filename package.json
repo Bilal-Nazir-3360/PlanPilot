@@ -40,7 +40,7 @@
     "autoprefixer": "latest",
     "framer-motion": "latest",
     "lucide-react": "latest",
-    "react": "^18.3.1",
+    "react": "^19.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.28.0",
     "recharts": "latest",
